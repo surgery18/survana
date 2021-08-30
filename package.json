@@ -1,0 +1,27 @@
+{
+  "name": "survana",
+  "version": "1.0.0",
+  "description": "Survey dApp demo.",
+  "main": "truffle-config.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/surgery18/survana.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/surgery18/survana/issues"
+  },
+  "homepage": "https://github.com/surgery18/survana#readme",
+  "dependencies": {
+    "chai": "^4.3.4",
+    "chai-as-promised": "^7.1.1"
+  }
+}

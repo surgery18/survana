@@ -182,12 +182,7 @@ contract Survana is Survey {
     for (uint256 index = 0; index < surveyCount; index++) {
       SurveyBuild memory s = surveys[index];
       if (s.creator == msg.sender) {
-        uint worth = 0;
-        for (uint j = 0; j < s.questions.length; j++) {
-          Question memory q = s.questions[j];
-          worth += q.worth;
-        }
-        _tmp[count] = (SurveyBasic(s.name, s.description, worth, s.bonusAmount));
+        _tmp[count] = (SurveyBasic(s.name, s.description, s.questionsWorth, s.bonusAmount));
         count++;
       }
     }

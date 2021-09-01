@@ -3,7 +3,7 @@ pragma solidity >=0.4.22 <0.9.0;
 
 contract Ownable {
 
-  address private owner;
+  address public owner;
 
   constructor() public {
     owner = msg.sender;
@@ -27,7 +27,11 @@ contract Ownable {
   }
 
   modifier onlyOwner {
-    require(msg.sender == owner);
+    require(isOwner());
     _;
+  }
+
+  function isOwner() public view returns (bool){
+    return msg.sender == owner;
   }
 }

@@ -133,6 +133,8 @@ contract Survana is Survey {
     SurveyBuild storage s = surveys[_id];
     //make sure it is still open
     require(s.status == Status.OPEN);
+    //make sure the creator didn't submit their own survey
+    require(s.creator != msg.sender);
     //this calulates how much rewards they get
     uint reward = 0;
     uint8 filled = 0;

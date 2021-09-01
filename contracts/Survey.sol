@@ -72,7 +72,7 @@ contract Survey is Ownable {
     uint count = 0;
     for (uint256 index = 0; index < surveyCount; index++) {
       SurveyBuild memory s = surveys[index];
-      if (s.status == Status.OPEN) {
+      if (s.status == Status.OPEN && s.creator != msg.sender) {
         _tmp[count] = (SurveyBasic(s.name, s.description, s.questionsWorth, s.bonusAmount));
         count++;
       }

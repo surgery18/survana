@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MIT
+pragma experimental ABIEncoderV2;
 pragma solidity >=0.4.22 <0.9.0;
 
 /*
@@ -21,17 +22,21 @@ Survana
 */
 
 import "./Survey.sol";
-import "../../swap-thang/contracts/Token.sol";
+import "./Ownable.sol";
+import "./Token.sol";
+import "./SurveyInterface.sol";
 
-contract Survana is Survey {
+contract Survana is Ownable, SurveyInterface {
   string public name = "Survana";
   mapping (address => bool) creators;
   Token public token;
+  mapping (uint => address) public surveys;
+  uint surveyCount = 0;
 
   //TODO
   //UNIT TESTS
 
-  constructor(Token memory _token) public {
+  constructor(Token _token) public {
     token = _token;
   }
   
@@ -39,7 +44,6 @@ contract Survana is Survey {
     require(creators[msg.sender] == true);
     _;
   }
-
 
   event AddedCreator(
     address indexed _creator
@@ -52,17 +56,36 @@ contract Survana is Survey {
   event DepositedTokensToPool(
     address _creator,
     uint _surveyId,
-    uint _amount,
-    uint _totalInSurveyPool
+    uint _amount
+  );
+
+  event DepositedGasToPool(
+    address _creator,
+    uint _surveyId,
+    uint _amount
+  );
+
+  event WithdrawFromTokenPool(
+    address _creator,
+    uint _surveyId,
+    uint _amount
+  );
+
+  event WithdrawFromGasPool(
+    address _creator,
+    uint _surveyId,
+    uint _amount
   );
 
   event SurveyCreated(
     address indexed _creator,
+    address indexed _newContract,
     uint _surveyId
   );
 
   event SurveyUpdated(
     address indexed _creator,
+    address indexed _contract,
     uint _surveyId
   );
 
@@ -70,6 +93,25 @@ contract Survana is Survey {
     address indexed _user,
     uint _surveyId,
     uint _tokensAwarded
+  );
+
+  event QuestionAdded(
+    address indexed _creator,
+    address indexed _contract,
+    uint _surveyId,
+    uint _questionId
+  );
+
+  event QuestionUpdated(
+    address indexed _creator,
+    address indexed _contract,
+    uint _surveyId,
+    uint _questionId
+  );
+
+  event SurveyStatusChanged(
+    Status _status,
+    uint _id
   );
 
   event TokenChanged(
@@ -87,111 +129,146 @@ contract Survana is Survey {
   }
 
   function depositToSurveyTokenPool(uint _id, uint _amount) external isCreator {
-    //check if it exists
-    SurveyBuild storage s = surveys[_id];
-    require(bytes(s.name).length > 0);
-    //grab the tokens from the user
-    //MAKE SURE TO CALL APPROVE FIRST
-    token.transferFrom(msg.sender, address(this), _amount);
-    // token.transfer(address(this), _amount);
-    s.tokenPoolAmount += _amount;
-    emit DepositedTokensToPool(msg.sender, _id, _amount, s.tokenPoolAmount);
+    require(_amount > 0);
+    Survey s = Survey(surveys[_id]);
+    require(bytes(s.name()).length > 0);
+    s.depositToSurveyTokenPool(token, _amount);
+    emit DepositedTokensToPool(msg.sender, _id, _amount);
   }
 
+  function depositToSurveyGasPool(uint _id) external isCreator payable {
+    require(msg.value > 0);
+    Survey s = Survey(surveys[_id]);
+    address payable _survContract = address(uint256(surveys[_id]));
+    _survContract.transfer(msg.value);
+    s.depositToSurveyGasPool(msg.value);
+    emit DepositedGasToPool(msg.sender, _id, msg.value);
+  }
 
-  function createSurvey(SurveyBuild storage _build) external isCreator {
-    require(creators[msg.sender] == true);
-    _build.creator = msg.sender;
-    _build.status = Status.NOT_OPENED;
-    _build.tokenPoolAmount = 0;
-    uint worth = 0;
-    for (uint i = 0; i < _build.questions.length; i++) {
-      Question memory q = _build.questions[i];
-      worth += q.worth;
-    }
-    _build.questionsWorth = worth;
-    surveys[surveyCount] = _build;
-    emit SurveyCreated(msg.sender, surveyCount);
+  function withdrawFromTokenPool(uint _id, uint _amount) external isCreator {
+    require(_amount > 0);
+    Survey s = Survey(surveys[_id]);
+    s.withdrawFromTokenPool(token, _amount);
+    emit WithdrawFromTokenPool(msg.sender, _id, _amount);
+  }
+
+  function withdrawFromGasPool(uint _id, uint _amount) external isCreator {
+    require(_amount > 0);
+    Survey s = Survey(surveys[_id]);
+    s.withdrawFromGasPool(_amount);
+    emit WithdrawFromGasPool(msg.sender, _id, _amount);
+  }
+
+  function createSurvey(
+    string calldata _name,
+    string calldata _description,
+    uint _bonusAmount
+  ) external isCreator {
+    Survey s = new Survey(msg.sender, _name, _description, _bonusAmount);
+    address newContract = address(s);
+    surveys[surveyCount] = newContract;
+    emit SurveyCreated(msg.sender, newContract, surveyCount);
     surveyCount++;
   }
 
-  function updateSurvey(uint _id, SurveyBuild storage _build) external isCreator {
-    require(creators[msg.sender] == true);
-    require(surveys[_id].status == Status.NOT_OPENED);
-    uint worth = 0;
-    for (uint i = 0; i < _build.questions.length; i++) {
-      Question memory q = _build.questions[i];
-      worth += q.worth;
-    }
-    _build.questionsWorth = worth;
-    surveys[_id] = _build;
-    emit SurveyUpdated(msg.sender, _id);
+  function updateSurvey(
+    uint _id,
+    string calldata _name,
+    string calldata _description,
+    uint _bonusAmount
+  ) external isCreator {
+    Survey s = Survey(surveys[_id]);
+    s.updateSurvey(_name, _description, _bonusAmount);
+    emit SurveyUpdated(msg.sender, address(s), _id);
   }
 
-  function submitSurvey(uint _id, SurveyAnswers memory _answers) external {
-    //grab the survey data
-    SurveyBuild storage s = surveys[_id];
-    //make sure it is still open
-    require(s.status == Status.OPEN);
-    //make sure the creator didn't submit their own survey
-    require(s.creator != msg.sender);
-    //this calulates how much rewards they get
-    uint reward = 0;
-    uint8 filled = 0;
-    for (uint j = 0; j < s.questions.length; j++) {
-      Question memory q = s.questions[j];
-      string memory a = _answers.answers[i];
-      if (bytes(a).length > 0) {
-        reward += q.worth;
-        filled++;
-      }
-    }
-    if (filled == s.questions.length) {
-      reward += s.bonusAmount;
-    }
-    //liquidity pool must have enough funds to continue this function
-    require(reward <= s.tokenPoolAmount);
+  function addQuestion(
+    uint _id,
+    QuestionType _qtypes,
+    uint _worth,
+    bool _required,
+    string memory _title,
+    string memory _qdescription,
+    string[] memory _choices
+  ) public  isCreator {
+    Survey s = Survey(surveys[_id]);
+    uint qid = s.addQuestion(_qtypes, _worth, _required, _title, _qdescription, _choices);
+    emit QuestionAdded(msg.sender, address(s), _id, qid);
+  }
 
-    //make sure we haven't done this survey before
-    require(userAnswers[msg.sender][_id] == 0);
-    //user submits their answers
-    userAnswers[msg.sender][_id] = _answers;
-    //push answers to mapping
-    for(uint i = 0; i < _answers.answers.length; i++) {
-      string memory a = _answers.answers[i];
-      if (bytes(a).length > 0) {
-        answers[_id][i].push(a); 
-      }
-    }
-    //this takes the money from the liquidity pool and sends them tokens
-    token.transfer(msg.sender, reward);
-    s.tokenPoolAmount -= reward;
+  function updateQuestion(
+    uint _id,
+    uint _qid,
+    QuestionType _qtypes,
+    uint _worth,
+    bool _required,
+    string memory _title,
+    string memory _qdescription,
+    string[] memory _choices
+  ) public isCreator {
+    Survey s = Survey(surveys[_id]);
+    s.updateQuestion(_qid, _qtypes, _worth, _required, _title, _qdescription, _choices);
+    emit QuestionUpdated(msg.sender, address(s), _id, _qid);
+  }
 
-    //this checks to see if the survey needs to close
-    //to check this we see if they can fund another survey
-    if (s.tokenPoolAmount < s.questionsWorth) {
-      s.status = Status.FINISHED;
-      emit SurveyStatusChanged(_id, s.status);
-    }
+  function setSurveyStatus(uint _id, Status _status) external isCreator {
+    Survey s = Survey(surveys[_id]);
+    s.setSurveyStatus(_status);
+    emit SurveyStatusChanged(_status, _id);
+  }
 
+
+  function submitSurvey(
+    uint _id,
+    string[] calldata _answers
+  ) external {
+    uint gas = gasleft();
+    Survey s = Survey(surveys[_id]);
+    uint reward = s.submitSurvey(gas, token, _answers);
     emit SurveySubmited(msg.sender, _id, reward);
   }
 
-  function getCreatorSurveys() external view returns (SurveyBasic[] memory) {
+  function getCreatorSurveys() external view returns (Survey[] memory) {
     require(creators[msg.sender] == true);
-    SurveyBasic[] memory _tmp;
+    Survey[] memory _tmp;
     uint count = 0;
     for (uint256 index = 0; index < surveyCount; index++) {
-      SurveyBuild memory s = surveys[index];
-      if (s.creator == msg.sender) {
-        _tmp[count] = (SurveyBasic(s.name, s.description, s.questionsWorth, s.bonusAmount));
+      Survey s = Survey(surveys[index]);
+      if (s.creator() == msg.sender) {
+        _tmp[count] = s;
         count++;
       }
     }
     return _tmp;
   }
 
-  function setToken(Token memory _token) external onlyOwner {
+  function getOpenSurveys() external view returns (Survey[] memory) {
+    Survey[] memory _tmp;
+    uint count = 0;
+    for (uint256 index = 0; index < surveyCount; index++) {
+      Survey s = Survey(surveys[index]);
+      if (s.status() == Status.OPEN && s.creator() != msg.sender) {
+        _tmp[count] = s;
+        count++;
+      }
+    }
+    return _tmp;
+  }
+
+  function getUserFinishedSurveys() external view returns (Survey[] memory) {
+    Survey[] memory _tmp;
+    uint count = 0;
+    for (uint256 index = 0; index < surveyCount; index++) {
+      Survey s = Survey(surveys[index]);
+      if (s.status() == Status.FINISHED && s.didUserTakeSurvey(msg.sender)) {
+        _tmp[count] = s;
+        count++;
+      }
+    }
+    return _tmp;
+  }
+
+  function setToken(Token _token) external onlyOwner {
     token = _token;
     emit TokenChanged(_token);
   }

@@ -3,7 +3,5 @@ const Survana = artifacts.require("Survana");
 
 module.exports = function(_deployer) {
   // Use deployer to state migration tasks.
-  // _deployer.deploy(Survana, "0xc58c7DE9bdd2BEdB3366b82E2F91dcfFA9DEf59a");
-
-  const estimate = await
+  _deployer.deploy(Survana, "0x0a222cA4166A6a4Ee4D4A019b1001bca151723C9");
 };

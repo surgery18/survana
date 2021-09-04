@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma experimental ABIEncoderV2;
-pragma solidity >=0.4.22 <0.9.0;
+pragma solidity >=0.6.0;
 
 import "./Ownable.sol";
 import "./SurveyInterface.sol";
@@ -28,18 +28,22 @@ contract Survey is SurveyInterface {
   //     questions[i] = _q[i];
   //   }
   // }
-
-  constructor(address _creator, string memory _name, string memory _description, uint _bonusAmount) public {
+  
+  constructor(address _creator, string memory _name, string memory _description, uint _bonusAmount) {
     // build = _b;
     // for (uint i = 0; i < _q.length; i++) {
     //   questions[i] = _q[i];
     // }
-    updateSurvey(_name, _description, _bonusAmount);
+    build.info.name = _name;
+    build.info.description = _description;
+    build.info.bonusAmount = _bonusAmount;
     build.creator = _creator;
   }
 
   modifier isCreator {
-    require(build.creator == msg.sender);
+    // require(build.creator == msg.sender);
+    //if either one is the creator continue on
+    require(build.creator == tx.origin); 
     _;
   }
 
@@ -53,7 +57,8 @@ contract Survey is SurveyInterface {
     string[] calldata _answers
   ) external returns (uint) {
     //make sure the creator didn't submit their own survey
-    require(build.creator != msg.sender);
+    //require(build.creator != msg.sender);
+    require(build.creator != tx.origin);
     //make sure it is still open
     require(build.status == Status.OPEN);
     //this calulates how much rewards they get
@@ -75,7 +80,7 @@ contract Survey is SurveyInterface {
 
     //make sure we haven't done this survey before
     // require(userAnswers[msg.sender][_id].answers.length == 0);
-    require(!didUserTakeSurvey(msg.sender));
+    require(!didUserTakeSurvey(tx.origin));
     //user submits their answers
     // userAnswers[msg.sender][_id] = SurveyAnswers(_answers);
     // string[] memory copyAnswers;
@@ -103,7 +108,8 @@ contract Survey is SurveyInterface {
         send = build.pool.gasAmount;
       }
       if (address(this).balance >= send) {
-        msg.sender.transfer(send);
+        address payable pa = payable(msg.sender);
+        pa.transfer(send);
         build.pool.gasAmount -= send;
         build.pool.totalGasSent += send;
       }
@@ -126,12 +132,28 @@ contract Survey is SurveyInterface {
     return build.info.name;
   }
 
+  function description() view external returns (string memory) {
+    return build.info.description;
+  }
+
+  function bonusAmount() view external returns (uint) {
+    return build.info.bonusAmount;
+  }
+
   function creator() view external returns (address) {
     return build.creator;
   }
 
   function status() view external returns (Status) {
     return build.status;
+  }
+
+  function info() view external returns (SurveyBasic memory) {
+    return build.info;
+  }
+
+  function pool() view external returns (LiquidityPool memory) {
+    return build.pool;
   }
 
   function worth() view public returns (uint) {
@@ -215,7 +237,8 @@ contract Survey is SurveyInterface {
   function withdrawFromGasPool(uint _amount) external isCreator {
     require(_amount > 0);
     require(address(this).balance >= _amount);
-    msg.sender.transfer(_amount);
+    address payable _addr = payable(msg.sender);
+    _addr.transfer(_amount);
     build.pool.gasAmount -= _amount;
   }
 

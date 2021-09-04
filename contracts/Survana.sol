@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma experimental ABIEncoderV2;
-pragma solidity >=0.4.22 <0.9.0;
+pragma solidity >=0.6.0;
 
 /*
 Survana
@@ -28,18 +28,18 @@ import "./SurveyInterface.sol";
 
 contract Survana is Ownable, SurveyInterface {
   string public name = "Survana";
-  mapping (address => bool) creators;
+  mapping (address => bool) public creators;
   Token public token;
   mapping (uint => address) public surveys;
   uint surveyCount = 0;
 
-  //TODO
-  //UNIT TESTS
+  mapping (address => uint) public creatorSurveyCount;
 
-  constructor(Token _token) public {
+  constructor(Token _token) {
     token = _token;
   }
-  
+
+
   modifier isCreator() {
     require(creators[msg.sender] == true);
     _;
@@ -139,8 +139,8 @@ contract Survana is Ownable, SurveyInterface {
   function depositToSurveyGasPool(uint _id) external isCreator payable {
     require(msg.value > 0);
     Survey s = Survey(surveys[_id]);
-    address payable _survContract = address(uint256(surveys[_id]));
-    _survContract.transfer(msg.value);
+    address payable _addr = payable(surveys[_id]);
+    _addr.transfer(msg.value);
     s.depositToSurveyGasPool(msg.value);
     emit DepositedGasToPool(msg.sender, _id, msg.value);
   }
@@ -169,6 +169,7 @@ contract Survana is Ownable, SurveyInterface {
     surveys[surveyCount] = newContract;
     emit SurveyCreated(msg.sender, newContract, surveyCount);
     surveyCount++;
+    creatorSurveyCount[msg.sender] = surveyCount;
   }
 
   function updateSurvey(
@@ -221,47 +222,47 @@ contract Survana is Ownable, SurveyInterface {
   function submitSurvey(
     uint _id,
     string[] calldata _answers
-  ) external {
+  ) external isCreator {
     uint gas = gasleft();
     Survey s = Survey(surveys[_id]);
     uint reward = s.submitSurvey(gas, token, _answers);
     emit SurveySubmited(msg.sender, _id, reward);
   }
 
-  function getCreatorSurveys() external view returns (Survey[] memory) {
+  function getCreatorSurveys() external view returns (SurveyBasic[] memory) {
     require(creators[msg.sender] == true);
-    Survey[] memory _tmp;
+    SurveyBasic[] memory _tmp = new SurveyBasic[](creatorSurveyCount[msg.sender]);
     uint count = 0;
     for (uint256 index = 0; index < surveyCount; index++) {
       Survey s = Survey(surveys[index]);
       if (s.creator() == msg.sender) {
-        _tmp[count] = s;
+        _tmp[count] = s.info();
         count++;
       }
     }
     return _tmp;
   }
 
-  function getOpenSurveys() external view returns (Survey[] memory) {
-    Survey[] memory _tmp;
+  function getOpenSurveys() external view returns (SurveyBasic[] memory) {
+    SurveyBasic[] memory _tmp = new SurveyBasic[](surveyCount);
     uint count = 0;
     for (uint256 index = 0; index < surveyCount; index++) {
       Survey s = Survey(surveys[index]);
       if (s.status() == Status.OPEN && s.creator() != msg.sender) {
-        _tmp[count] = s;
+        _tmp[count] = s.info();
         count++;
       }
     }
     return _tmp;
   }
 
-  function getUserFinishedSurveys() external view returns (Survey[] memory) {
-    Survey[] memory _tmp;
+  function getUserFinishedSurveys() external view returns (SurveyBasic[] memory) {
+    SurveyBasic[] memory _tmp = new SurveyBasic[](surveyCount);
     uint count = 0;
     for (uint256 index = 0; index < surveyCount; index++) {
       Survey s = Survey(surveys[index]);
       if (s.status() == Status.FINISHED && s.didUserTakeSurvey(msg.sender)) {
-        _tmp[count] = s;
+        _tmp[count] = s.info();
         count++;
       }
     }

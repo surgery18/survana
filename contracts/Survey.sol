@@ -2,7 +2,6 @@
 pragma experimental ABIEncoderV2;
 pragma solidity >=0.6.0;
 
-import "./Ownable.sol";
 import "./SurveyInterface.sol";
 import "./Token.sol";
 
@@ -11,10 +10,10 @@ contract Survey is SurveyInterface {
   //multichoice would store index, rating would be a number, and text is text
   // Question[] public questions;
   mapping(uint => Question) public questions;
-  uint questionCount = 0;
+  uint public questionCount = 0;
 
-  mapping (uint => string[]) internal answers;
-  mapping (address => uint) internal userAnswers;
+  mapping (uint => string[]) public answers;
+  mapping (address => uint) private userAnswers;
 
   SurveyBuild public build;
 
@@ -43,7 +42,7 @@ contract Survey is SurveyInterface {
   modifier isCreator {
     // require(build.creator == msg.sender);
     //if either one is the creator continue on
-    require(build.creator == tx.origin); 
+    require(build.creator == tx.origin, "Must be the creator to access this function"); 
     _;
   }
 
@@ -51,16 +50,21 @@ contract Survey is SurveyInterface {
     build.status = _status;
   }
 
+  event Log(string s);
+
   function submitSurvey(
     uint _gas,
     Token _token,
     string[] calldata _answers
   ) external returns (uint) {
+    require(_answers.length == questionCount, "Answer string array does not match the length of questions");
+    //make sure we haven't done this survey before
+    require(!didUserTakeSurvey(tx.origin), "Already took the survey");
+
     //make sure the creator didn't submit their own survey
-    //require(build.creator != msg.sender);
-    require(build.creator != tx.origin);
+    require(build.creator != tx.origin, "Creator cannot take the survey");
     //make sure it is still open
-    require(build.status == Status.OPEN);
+    require(build.status == Status.OPEN, "Survey is not open");
     //this calulates how much rewards they get
     uint reward = 0;
     uint8 filled = 0;
@@ -70,24 +74,17 @@ contract Survey is SurveyInterface {
       if (bytes(a).length > 0) {
         reward += q.worth;
         filled++;
+      } else if (q.required) {
+        revert("Required question not filled out");
       }
     }
     if (filled == questionCount) {
       reward += build.info.bonusAmount;
     }
     //liquidity pool must have enough funds to continue this function
-    require(reward <= build.pool.tokenAmount);
+    require(reward <= build.pool.tokenAmount, "Not enough reward to give, cancelling submission.");
 
-    //make sure we haven't done this survey before
-    // require(userAnswers[msg.sender][_id].answers.length == 0);
-    require(!didUserTakeSurvey(tx.origin));
-    //user submits their answers
-    // userAnswers[msg.sender][_id] = SurveyAnswers(_answers);
-    // string[] memory copyAnswers;
-    // for (uint i = 0; i < _answers.length; i++) {
-    //   copyAnswers[i] = _answers[i];
-    // }
-    userAnswers[msg.sender] = build.surveysTaken;
+    userAnswers[tx.origin] = build.surveysTaken + 1; //tells you which id you are in the string[] of questions
     //push answers to mapping
     for(uint i = 0; i < _answers.length; i++) {
       string memory a = _answers[i];
@@ -95,8 +92,9 @@ contract Survey is SurveyInterface {
         answers[i].push(a); 
       }
     }
+
     //this takes the money from the liquidity pool and sends them tokens
-    _token.transfer(msg.sender, reward);
+    _token.transfer(tx.origin, reward);
     build.pool.tokenAmount -= reward;
     build.pool.totalTokensSent += reward;
 
@@ -108,7 +106,7 @@ contract Survey is SurveyInterface {
         send = build.pool.gasAmount;
       }
       if (address(this).balance >= send) {
-        address payable pa = payable(msg.sender);
+        address payable pa = payable(tx.origin);
         pa.transfer(send);
         build.pool.gasAmount -= send;
         build.pool.totalGasSent += send;
@@ -124,7 +122,6 @@ contract Survey is SurveyInterface {
       build.status = Status.FINISHED;
       emit SurveyStatusChanged(build.status);
     }
-
     return reward;
   }
 
@@ -156,6 +153,10 @@ contract Survey is SurveyInterface {
     return build.pool;
   }
 
+  function getBalance() view external returns (uint) {
+    return address(this).balance;
+  }
+
   function worth() view public returns (uint) {
     uint w = 0;
     for (uint i = 0; i < questionCount; i++) {
@@ -163,6 +164,24 @@ contract Survey is SurveyInterface {
       w += q.worth;
     }
     return w;
+  }
+
+  function getQuestions() external view returns (Question[] memory) {
+    Question[] memory q = new Question[](questionCount);
+    for (uint256 index = 0; index < questionCount; index++) {
+      q[index] = questions[index];
+    }
+    return q;
+  }
+
+  function getUserAnswers() external view returns (string[] memory) {
+    uint index = userAnswers[tx.origin] - 1;
+    require(index >= 0, "No answers found");
+    string[] memory ret = new string[](questionCount);
+    for (uint256 i = 0; i < questionCount; i++) {
+      ret[i] = answers[i][index];
+    }
+    return ret;
   }
 
   function updateSurvey(
@@ -217,38 +236,48 @@ contract Survey is SurveyInterface {
   }
 
   function depositToSurveyTokenPool(Token _token, uint _amount) external isCreator {
-    require(_amount > 0);
-    _token.transferFrom(msg.sender, address(this), _amount);
+    require(_amount > 0, "amount has to be greater than zero");
+    _token.transferFrom(tx.origin, address(this), _amount);
     build.pool.tokenAmount += _amount;
   }
 
-  function depositToSurveyGasPool(uint _value) external isCreator {
-    require(_value > 0);
-    build.pool.gasAmount += _value;
+  // function depositToSurveyGasPool(uint _value) external isCreator {
+  function depositToSurveyGasPool() external payable isCreator {
+  // receive() external payable {
+    // require(tx.origin == build.creator);
+    require(msg.value > 0, "amount has to be greater than zero");
+    build.pool.gasAmount += msg.value;
   }
 
   function withdrawFromTokenPool(Token _token, uint _amount) external isCreator {
-    require(_amount > 0);
-    require(_token.balanceOf(address(this)) >= _amount);
-    _token.transfer(msg.sender, _amount);
+    require(_amount > 0, "amount has to be greater than zero");
+    require(_token.balanceOf(address(this)) >= _amount, "Balance has to be >= than the amount to withdraw");
+    _token.transfer(tx.origin, _amount);
     build.pool.tokenAmount -= _amount;
   }
 
   function withdrawFromGasPool(uint _amount) external isCreator {
-    require(_amount > 0);
-    require(address(this).balance >= _amount);
-    address payable _addr = payable(msg.sender);
+    require(_amount > 0, "amount has to be greater than zero");
+    require(address(this).balance >= _amount, "Balance has to be >= than the amount to withdraw");
+    address payable _addr = payable(tx.origin);
     _addr.transfer(_amount);
     build.pool.gasAmount -= _amount;
   }
 
   function didUserTakeSurvey(address _addr) view public returns (bool) {
     uint index = userAnswers[_addr];
-    for (uint i = 0; i < questionCount; i++) {
-      string memory a = answers[i][index];
-      if (bytes(a).length > 0) {
-        return true;
-      }
+    if (index > 0) {
+      // index--;
+      // for (uint i = 0; i < questionCount; i++) {
+      //   string[] memory s = answers[i];
+      //   if (s.length > 0 && s.length > index) {
+      //     string memory a = s[index];
+      //     if (bytes(a).length > 0) {
+      //       return true;
+      //     }
+      //   }
+      // }
+      return true;
     }
     return false;
   }

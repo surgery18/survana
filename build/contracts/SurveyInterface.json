@@ -1,46 +1,46 @@
 {
   "contractName": "SurveyInterface",
   "abi": [],
-  "metadata": "{\"compiler\":{\"version\":\"0.8.7+commit.e28d00a7\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/SurveyInterface.sol\":\"SurveyInterface\"},\"evmVersion\":\"byzantium\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/SurveyInterface.sol\":{\"keccak256\":\"0x28493a87386c1598881ef1f655d792cd79ff75e8dd982c8900246cb3f9f70425\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://46026cbf8fd27d92d58f6aacbe725d0676df037bc2bf04ae4bf90315e398f781\",\"dweb:/ipfs/QmW9eyETHFi9t9fFBRqUH6hDC6Xc6nFFnzLZtm9hYdEUWj\"]}},\"version\":1}",
-  "bytecode": "0x6080604052348015600f57600080fd5b50603f80601d6000396000f3fe6080604052600080fdfea2646970667358221220694aa138849edaec2bc26b4aabaef2f9d28a35023b4ec69cbb7fa35c1545535164736f6c63430008070033",
-  "deployedBytecode": "0x6080604052600080fdfea2646970667358221220694aa138849edaec2bc26b4aabaef2f9d28a35023b4ec69cbb7fa35c1545535164736f6c63430008070033",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.7+commit.e28d00a7\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/SurveyInterface.sol\":\"SurveyInterface\"},\"evmVersion\":\"byzantium\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/SurveyInterface.sol\":{\"keccak256\":\"0x97ca55626f710c1fa9b347f9e6a664977aed5ceaa57aa24b58e12407d073b8b5\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://81db1c0d7124bd6c8bb6c860f5c11b4441749e180e5a8ef617e708ca7a5ea096\",\"dweb:/ipfs/QmS4gZF9fvmvygfzDV4YSieEsqapKZuWXsgS1rTxbHCLHB\"]}},\"version\":1}",
+  "bytecode": "0x6080604052348015600f57600080fd5b50603f80601d6000396000f3fe6080604052600080fdfea2646970667358221220505b1f570b7705abd4a4f220dca0e4c36dfb2b63ecdd6b73ffcabe929cd2f49a64736f6c63430008070033",
+  "deployedBytecode": "0x6080604052600080fdfea2646970667358221220505b1f570b7705abd4a4f220dca0e4c36dfb2b63ecdd6b73ffcabe929cd2f49a64736f6c63430008070033",
   "immutableReferences": {},
   "generatedSources": [],
   "deployedGeneratedSources": [],
-  "sourceMap": "92:706:4:-:0;;;;;;;;;;;;;;;;;;;",
-  "deployedSourceMap": "92:706:4:-:0;;;;;",
-  "source": "// SPDX-License-Identifier: MIT\npragma experimental ABIEncoderV2;\npragma solidity >=0.8.0;\n\ncontract SurveyInterface {\n  enum Status {\n    NOT_OPENED,\n    OPEN,\n    FINISHED\n  }\n\n  enum QuestionType {\n    MULTIPLE_CHOICE,\n    RATE,\n    TEXT\n  }\n\n  struct Question {\n    QuestionType questionType;\n    uint worth;\n    bool required;\n    string title;\n    string description;\n    string[] choices;\n  }\n\n  struct LiquidityPool {\n    uint tokenAmount;\n    uint gasAmount;\n    uint totalGasSent;\n    uint totalTokensSent;\n  }\n\n  struct SurveyBasic {\n    string name;\n    string description;\n    // uint worth;\n    uint bonusAmount;\n  }\n\n  struct SurveyBuild {\n    SurveyBasic info;\n    // Question[] questions;\n    LiquidityPool pool;\n    uint surveysTaken;\n    Status status;\n    address creator;\n  }\n}",
-  "sourcePath": "/home/scott/projects/survana/contracts/SurveyInterface.sol",
+  "sourceMap": "96:750:4:-:0;;;;;;;;;;;;;;;;;;;",
+  "deployedSourceMap": "96:750:4:-:0;;;;;",
+  "source": "// SPDX-License-Identifier: MIT\r\npragma experimental ABIEncoderV2;\r\npragma solidity >=0.6.0;\r\n\r\ncontract SurveyInterface {\r\n  enum Status {\r\n    NOT_OPENED,\r\n    OPEN,\r\n    FINISHED\r\n  }\r\n\r\n  enum QuestionType {\r\n    MULTIPLE_CHOICE,\r\n    RATE,\r\n    TEXT\r\n  }\r\n\r\n  struct Question {\r\n    QuestionType questionType;\r\n    uint worth;\r\n    bool required;\r\n    string title;\r\n    string description;\r\n    string[] choices;\r\n  }\r\n\r\n  struct LiquidityPool {\r\n    uint tokenAmount;\r\n    uint gasAmount;\r\n    uint totalGasSent;\r\n    uint totalTokensSent;\r\n  }\r\n\r\n  struct SurveyBasic {\r\n    string name;\r\n    string description;\r\n    // uint worth;\r\n    uint bonusAmount;\r\n  }\r\n\r\n  struct SurveyBuild {\r\n    SurveyBasic info;\r\n    // Question[] questions;\r\n    LiquidityPool pool;\r\n    uint surveysTaken;\r\n    Status status;\r\n    address creator;\r\n  }\r\n}",
+  "sourcePath": "C:\\Users\\surge\\Desktop\\dapp-projects\\survana\\contracts\\SurveyInterface.sol",
   "ast": {
     "absolutePath": "project:/contracts/SurveyInterface.sol",
     "exportedSymbols": {
       "SurveyInterface": [
-        1777
+        1896
       ]
     },
-    "id": 1778,
+    "id": 1897,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 1722,
+        "id": 1841,
         "literals": [
           "experimental",
           "ABIEncoderV2"
         ],
         "nodeType": "PragmaDirective",
-        "src": "32:33:4"
+        "src": "33:33:4"
       },
       {
-        "id": 1723,
+        "id": 1842,
         "literals": [
           "solidity",
           ">=",
-          "0.8",
+          "0.6",
           ".0"
         ],
         "nodeType": "PragmaDirective",
-        "src": "66:24:4"
+        "src": "68:24:4"
       },
       {
         "abstract": false,
@@ -48,109 +48,109 @@
         "contractDependencies": [],
         "contractKind": "contract",
         "fullyImplemented": true,
-        "id": 1777,
+        "id": 1896,
         "linearizedBaseContracts": [
-          1777
+          1896
         ],
         "name": "SurveyInterface",
-        "nameLocation": "101:15:4",
+        "nameLocation": "105:15:4",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "canonicalName": "SurveyInterface.Status",
-            "id": 1727,
+            "id": 1846,
             "members": [
               {
-                "id": 1724,
+                "id": 1843,
                 "name": "NOT_OPENED",
-                "nameLocation": "139:10:4",
+                "nameLocation": "145:10:4",
                 "nodeType": "EnumValue",
-                "src": "139:10:4"
+                "src": "145:10:4"
               },
               {
-                "id": 1725,
+                "id": 1844,
                 "name": "OPEN",
-                "nameLocation": "155:4:4",
+                "nameLocation": "162:4:4",
                 "nodeType": "EnumValue",
-                "src": "155:4:4"
+                "src": "162:4:4"
               },
               {
-                "id": 1726,
+                "id": 1845,
                 "name": "FINISHED",
-                "nameLocation": "165:8:4",
+                "nameLocation": "173:8:4",
                 "nodeType": "EnumValue",
-                "src": "165:8:4"
+                "src": "173:8:4"
               }
             ],
             "name": "Status",
-            "nameLocation": "126:6:4",
+            "nameLocation": "131:6:4",
             "nodeType": "EnumDefinition",
-            "src": "121:56:4"
+            "src": "126:60:4"
           },
           {
             "canonicalName": "SurveyInterface.QuestionType",
-            "id": 1731,
+            "id": 1850,
             "members": [
               {
-                "id": 1728,
+                "id": 1847,
                 "name": "MULTIPLE_CHOICE",
-                "nameLocation": "205:15:4",
+                "nameLocation": "217:15:4",
                 "nodeType": "EnumValue",
-                "src": "205:15:4"
+                "src": "217:15:4"
               },
               {
-                "id": 1729,
+                "id": 1848,
                 "name": "RATE",
-                "nameLocation": "226:4:4",
+                "nameLocation": "239:4:4",
                 "nodeType": "EnumValue",
-                "src": "226:4:4"
+                "src": "239:4:4"
               },
               {
-                "id": 1730,
+                "id": 1849,
                 "name": "TEXT",
-                "nameLocation": "236:4:4",
+                "nameLocation": "250:4:4",
                 "nodeType": "EnumValue",
-                "src": "236:4:4"
+                "src": "250:4:4"
               }
             ],
             "name": "QuestionType",
-            "nameLocation": "186:12:4",
+            "nameLocation": "197:12:4",
             "nodeType": "EnumDefinition",
-            "src": "181:63:4"
+            "src": "192:67:4"
           },
           {
             "canonicalName": "SurveyInterface.Question",
-            "id": 1746,
+            "id": 1865,
             "members": [
               {
                 "constant": false,
-                "id": 1734,
+                "id": 1853,
                 "mutability": "mutable",
                 "name": "questionType",
-                "nameLocation": "283:12:4",
+                "nameLocation": "301:12:4",
                 "nodeType": "VariableDeclaration",
-                "scope": 1746,
-                "src": "270:25:4",
+                "scope": 1865,
+                "src": "288:25:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_enum$_QuestionType_$1731",
+                  "typeIdentifier": "t_enum$_QuestionType_$1850",
                   "typeString": "enum SurveyInterface.QuestionType"
                 },
                 "typeName": {
-                  "id": 1733,
+                  "id": 1852,
                   "nodeType": "UserDefinedTypeName",
                   "pathNode": {
-                    "id": 1732,
+                    "id": 1851,
                     "name": "QuestionType",
                     "nodeType": "IdentifierPath",
-                    "referencedDeclaration": 1731,
-                    "src": "270:12:4"
+                    "referencedDeclaration": 1850,
+                    "src": "288:12:4"
                   },
-                  "referencedDeclaration": 1731,
-                  "src": "270:12:4",
+                  "referencedDeclaration": 1850,
+                  "src": "288:12:4",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_enum$_QuestionType_$1731",
+                    "typeIdentifier": "t_enum$_QuestionType_$1850",
                     "typeString": "enum SurveyInterface.QuestionType"
                   }
                 },
@@ -158,13 +158,13 @@
               },
               {
                 "constant": false,
-                "id": 1736,
+                "id": 1855,
                 "mutability": "mutable",
                 "name": "worth",
-                "nameLocation": "306:5:4",
+                "nameLocation": "325:5:4",
                 "nodeType": "VariableDeclaration",
-                "scope": 1746,
-                "src": "301:10:4",
+                "scope": 1865,
+                "src": "320:10:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -172,10 +172,10 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 1735,
+                  "id": 1854,
                   "name": "uint",
                   "nodeType": "ElementaryTypeName",
-                  "src": "301:4:4",
+                  "src": "320:4:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -185,13 +185,13 @@
               },
               {
                 "constant": false,
-                "id": 1738,
+                "id": 1857,
                 "mutability": "mutable",
                 "name": "required",
-                "nameLocation": "322:8:4",
+                "nameLocation": "342:8:4",
                 "nodeType": "VariableDeclaration",
-                "scope": 1746,
-                "src": "317:13:4",
+                "scope": 1865,
+                "src": "337:13:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -199,10 +199,10 @@
                   "typeString": "bool"
                 },
                 "typeName": {
-                  "id": 1737,
+                  "id": 1856,
                   "name": "bool",
                   "nodeType": "ElementaryTypeName",
-                  "src": "317:4:4",
+                  "src": "337:4:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_bool",
                     "typeString": "bool"
@@ -212,13 +212,13 @@
               },
               {
                 "constant": false,
-                "id": 1740,
+                "id": 1859,
                 "mutability": "mutable",
                 "name": "title",
-                "nameLocation": "343:5:4",
+                "nameLocation": "364:5:4",
                 "nodeType": "VariableDeclaration",
-                "scope": 1746,
-                "src": "336:12:4",
+                "scope": 1865,
+                "src": "357:12:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -226,10 +226,10 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 1739,
+                  "id": 1858,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
-                  "src": "336:6:4",
+                  "src": "357:6:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_string_storage_ptr",
                     "typeString": "string"
@@ -239,13 +239,13 @@
               },
               {
                 "constant": false,
-                "id": 1742,
+                "id": 1861,
                 "mutability": "mutable",
                 "name": "description",
-                "nameLocation": "361:11:4",
+                "nameLocation": "383:11:4",
                 "nodeType": "VariableDeclaration",
-                "scope": 1746,
-                "src": "354:18:4",
+                "scope": 1865,
+                "src": "376:18:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -253,10 +253,10 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 1741,
+                  "id": 1860,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
-                  "src": "354:6:4",
+                  "src": "376:6:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_string_storage_ptr",
                     "typeString": "string"
@@ -266,13 +266,13 @@
               },
               {
                 "constant": false,
-                "id": 1745,
+                "id": 1864,
                 "mutability": "mutable",
                 "name": "choices",
-                "nameLocation": "387:7:4",
+                "nameLocation": "410:7:4",
                 "nodeType": "VariableDeclaration",
-                "scope": 1746,
-                "src": "378:16:4",
+                "scope": 1865,
+                "src": "401:16:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -281,18 +281,18 @@
                 },
                 "typeName": {
                   "baseType": {
-                    "id": 1743,
+                    "id": 1862,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
-                    "src": "378:6:4",
+                    "src": "401:6:4",
                     "typeDescriptions": {
                       "typeIdentifier": "t_string_storage_ptr",
                       "typeString": "string"
                     }
                   },
-                  "id": 1744,
+                  "id": 1863,
                   "nodeType": "ArrayTypeName",
-                  "src": "378:8:4",
+                  "src": "401:8:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_array$_t_string_storage_$dyn_storage_ptr",
                     "typeString": "string[]"
@@ -302,25 +302,25 @@
               }
             ],
             "name": "Question",
-            "nameLocation": "255:8:4",
+            "nameLocation": "272:8:4",
             "nodeType": "StructDefinition",
-            "scope": 1777,
-            "src": "248:151:4",
+            "scope": 1896,
+            "src": "265:158:4",
             "visibility": "public"
           },
           {
             "canonicalName": "SurveyInterface.LiquidityPool",
-            "id": 1755,
+            "id": 1874,
             "members": [
               {
                 "constant": false,
-                "id": 1748,
+                "id": 1867,
                 "mutability": "mutable",
                 "name": "tokenAmount",
-                "nameLocation": "435:11:4",
+                "nameLocation": "462:11:4",
                 "nodeType": "VariableDeclaration",
-                "scope": 1755,
-                "src": "430:16:4",
+                "scope": 1874,
+                "src": "457:16:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -328,10 +328,10 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 1747,
+                  "id": 1866,
                   "name": "uint",
                   "nodeType": "ElementaryTypeName",
-                  "src": "430:4:4",
+                  "src": "457:4:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -341,13 +341,13 @@
               },
               {
                 "constant": false,
-                "id": 1750,
+                "id": 1869,
                 "mutability": "mutable",
                 "name": "gasAmount",
-                "nameLocation": "457:9:4",
+                "nameLocation": "485:9:4",
                 "nodeType": "VariableDeclaration",
-                "scope": 1755,
-                "src": "452:14:4",
+                "scope": 1874,
+                "src": "480:14:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -355,10 +355,10 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 1749,
+                  "id": 1868,
                   "name": "uint",
                   "nodeType": "ElementaryTypeName",
-                  "src": "452:4:4",
+                  "src": "480:4:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -368,13 +368,13 @@
               },
               {
                 "constant": false,
-                "id": 1752,
+                "id": 1871,
                 "mutability": "mutable",
                 "name": "totalGasSent",
-                "nameLocation": "477:12:4",
+                "nameLocation": "506:12:4",
                 "nodeType": "VariableDeclaration",
-                "scope": 1755,
-                "src": "472:17:4",
+                "scope": 1874,
+                "src": "501:17:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -382,10 +382,10 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 1751,
+                  "id": 1870,
                   "name": "uint",
                   "nodeType": "ElementaryTypeName",
-                  "src": "472:4:4",
+                  "src": "501:4:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -395,13 +395,13 @@
               },
               {
                 "constant": false,
-                "id": 1754,
+                "id": 1873,
                 "mutability": "mutable",
                 "name": "totalTokensSent",
-                "nameLocation": "500:15:4",
+                "nameLocation": "530:15:4",
                 "nodeType": "VariableDeclaration",
-                "scope": 1755,
-                "src": "495:20:4",
+                "scope": 1874,
+                "src": "525:20:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -409,10 +409,10 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 1753,
+                  "id": 1872,
                   "name": "uint",
                   "nodeType": "ElementaryTypeName",
-                  "src": "495:4:4",
+                  "src": "525:4:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -422,25 +422,25 @@
               }
             ],
             "name": "LiquidityPool",
-            "nameLocation": "410:13:4",
+            "nameLocation": "436:13:4",
             "nodeType": "StructDefinition",
-            "scope": 1777,
-            "src": "403:117:4",
+            "scope": 1896,
+            "src": "429:122:4",
             "visibility": "public"
           },
           {
             "canonicalName": "SurveyInterface.SurveyBasic",
-            "id": 1762,
+            "id": 1881,
             "members": [
               {
                 "constant": false,
-                "id": 1757,
+                "id": 1876,
                 "mutability": "mutable",
                 "name": "name",
-                "nameLocation": "556:4:4",
+                "nameLocation": "590:4:4",
                 "nodeType": "VariableDeclaration",
-                "scope": 1762,
-                "src": "549:11:4",
+                "scope": 1881,
+                "src": "583:11:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -448,10 +448,10 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 1756,
+                  "id": 1875,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
-                  "src": "549:6:4",
+                  "src": "583:6:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_string_storage_ptr",
                     "typeString": "string"
@@ -461,13 +461,13 @@
               },
               {
                 "constant": false,
-                "id": 1759,
+                "id": 1878,
                 "mutability": "mutable",
                 "name": "description",
-                "nameLocation": "573:11:4",
+                "nameLocation": "608:11:4",
                 "nodeType": "VariableDeclaration",
-                "scope": 1762,
-                "src": "566:18:4",
+                "scope": 1881,
+                "src": "601:18:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -475,10 +475,10 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 1758,
+                  "id": 1877,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
-                  "src": "566:6:4",
+                  "src": "601:6:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_string_storage_ptr",
                     "typeString": "string"
@@ -488,13 +488,13 @@
               },
               {
                 "constant": false,
-                "id": 1761,
+                "id": 1880,
                 "mutability": "mutable",
                 "name": "bonusAmount",
-                "nameLocation": "614:11:4",
+                "nameLocation": "651:11:4",
                 "nodeType": "VariableDeclaration",
-                "scope": 1762,
-                "src": "609:16:4",
+                "scope": 1881,
+                "src": "646:16:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -502,10 +502,10 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 1760,
+                  "id": 1879,
                   "name": "uint",
                   "nodeType": "ElementaryTypeName",
-                  "src": "609:4:4",
+                  "src": "646:4:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -515,45 +515,45 @@
               }
             ],
             "name": "SurveyBasic",
-            "nameLocation": "531:11:4",
+            "nameLocation": "564:11:4",
             "nodeType": "StructDefinition",
-            "scope": 1777,
-            "src": "524:106:4",
+            "scope": 1896,
+            "src": "557:111:4",
             "visibility": "public"
           },
           {
             "canonicalName": "SurveyInterface.SurveyBuild",
-            "id": 1776,
+            "id": 1895,
             "members": [
               {
                 "constant": false,
-                "id": 1765,
+                "id": 1884,
                 "mutability": "mutable",
                 "name": "info",
-                "nameLocation": "671:4:4",
+                "nameLocation": "712:4:4",
                 "nodeType": "VariableDeclaration",
-                "scope": 1776,
-                "src": "659:16:4",
+                "scope": 1895,
+                "src": "700:16:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_struct$_SurveyBasic_$1762_storage_ptr",
+                  "typeIdentifier": "t_struct$_SurveyBasic_$1881_storage_ptr",
                   "typeString": "struct SurveyInterface.SurveyBasic"
                 },
                 "typeName": {
-                  "id": 1764,
+                  "id": 1883,
                   "nodeType": "UserDefinedTypeName",
                   "pathNode": {
-                    "id": 1763,
+                    "id": 1882,
                     "name": "SurveyBasic",
                     "nodeType": "IdentifierPath",
-                    "referencedDeclaration": 1762,
-                    "src": "659:11:4"
+                    "referencedDeclaration": 1881,
+                    "src": "700:11:4"
                   },
-                  "referencedDeclaration": 1762,
-                  "src": "659:11:4",
+                  "referencedDeclaration": 1881,
+                  "src": "700:11:4",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_struct$_SurveyBasic_$1762_storage_ptr",
+                    "typeIdentifier": "t_struct$_SurveyBasic_$1881_storage_ptr",
                     "typeString": "struct SurveyInterface.SurveyBasic"
                   }
                 },
@@ -561,33 +561,33 @@
               },
               {
                 "constant": false,
-                "id": 1768,
+                "id": 1887,
                 "mutability": "mutable",
                 "name": "pool",
-                "nameLocation": "724:4:4",
+                "nameLocation": "767:4:4",
                 "nodeType": "VariableDeclaration",
-                "scope": 1776,
-                "src": "710:18:4",
+                "scope": 1895,
+                "src": "753:18:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_struct$_LiquidityPool_$1755_storage_ptr",
+                  "typeIdentifier": "t_struct$_LiquidityPool_$1874_storage_ptr",
                   "typeString": "struct SurveyInterface.LiquidityPool"
                 },
                 "typeName": {
-                  "id": 1767,
+                  "id": 1886,
                   "nodeType": "UserDefinedTypeName",
                   "pathNode": {
-                    "id": 1766,
+                    "id": 1885,
                     "name": "LiquidityPool",
                     "nodeType": "IdentifierPath",
-                    "referencedDeclaration": 1755,
-                    "src": "710:13:4"
+                    "referencedDeclaration": 1874,
+                    "src": "753:13:4"
                   },
-                  "referencedDeclaration": 1755,
-                  "src": "710:13:4",
+                  "referencedDeclaration": 1874,
+                  "src": "753:13:4",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_struct$_LiquidityPool_$1755_storage_ptr",
+                    "typeIdentifier": "t_struct$_LiquidityPool_$1874_storage_ptr",
                     "typeString": "struct SurveyInterface.LiquidityPool"
                   }
                 },
@@ -595,13 +595,13 @@
               },
               {
                 "constant": false,
-                "id": 1770,
+                "id": 1889,
                 "mutability": "mutable",
                 "name": "surveysTaken",
-                "nameLocation": "739:12:4",
+                "nameLocation": "783:12:4",
                 "nodeType": "VariableDeclaration",
-                "scope": 1776,
-                "src": "734:17:4",
+                "scope": 1895,
+                "src": "778:17:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -609,10 +609,10 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 1769,
+                  "id": 1888,
                   "name": "uint",
                   "nodeType": "ElementaryTypeName",
-                  "src": "734:4:4",
+                  "src": "778:4:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -622,33 +622,33 @@
               },
               {
                 "constant": false,
-                "id": 1773,
+                "id": 1892,
                 "mutability": "mutable",
                 "name": "status",
-                "nameLocation": "764:6:4",
+                "nameLocation": "809:6:4",
                 "nodeType": "VariableDeclaration",
-                "scope": 1776,
-                "src": "757:13:4",
+                "scope": 1895,
+                "src": "802:13:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_enum$_Status_$1727",
+                  "typeIdentifier": "t_enum$_Status_$1846",
                   "typeString": "enum SurveyInterface.Status"
                 },
                 "typeName": {
-                  "id": 1772,
+                  "id": 1891,
                   "nodeType": "UserDefinedTypeName",
                   "pathNode": {
-                    "id": 1771,
+                    "id": 1890,
                     "name": "Status",
                     "nodeType": "IdentifierPath",
-                    "referencedDeclaration": 1727,
-                    "src": "757:6:4"
+                    "referencedDeclaration": 1846,
+                    "src": "802:6:4"
                   },
-                  "referencedDeclaration": 1727,
-                  "src": "757:6:4",
+                  "referencedDeclaration": 1846,
+                  "src": "802:6:4",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_enum$_Status_$1727",
+                    "typeIdentifier": "t_enum$_Status_$1846",
                     "typeString": "enum SurveyInterface.Status"
                   }
                 },
@@ -656,13 +656,13 @@
               },
               {
                 "constant": false,
-                "id": 1775,
+                "id": 1894,
                 "mutability": "mutable",
                 "name": "creator",
-                "nameLocation": "784:7:4",
+                "nameLocation": "830:7:4",
                 "nodeType": "VariableDeclaration",
-                "scope": 1776,
-                "src": "776:15:4",
+                "scope": 1895,
+                "src": "822:15:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -670,10 +670,10 @@
                   "typeString": "address"
                 },
                 "typeName": {
-                  "id": 1774,
+                  "id": 1893,
                   "name": "address",
                   "nodeType": "ElementaryTypeName",
-                  "src": "776:7:4",
+                  "src": "822:7:4",
                   "stateMutability": "nonpayable",
                   "typeDescriptions": {
                     "typeIdentifier": "t_address",
@@ -684,50 +684,50 @@
               }
             ],
             "name": "SurveyBuild",
-            "nameLocation": "641:11:4",
+            "nameLocation": "681:11:4",
             "nodeType": "StructDefinition",
-            "scope": 1777,
-            "src": "634:162:4",
+            "scope": 1896,
+            "src": "674:169:4",
             "visibility": "public"
           }
         ],
-        "scope": 1778,
-        "src": "92:706:4",
+        "scope": 1897,
+        "src": "96:750:4",
         "usedErrors": []
       }
     ],
-    "src": "32:766:4"
+    "src": "33:813:4"
   },
   "legacyAST": {
     "absolutePath": "project:/contracts/SurveyInterface.sol",
     "exportedSymbols": {
       "SurveyInterface": [
-        1777
+        1896
       ]
     },
-    "id": 1778,
+    "id": 1897,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 1722,
+        "id": 1841,
         "literals": [
           "experimental",
           "ABIEncoderV2"
         ],
         "nodeType": "PragmaDirective",
-        "src": "32:33:4"
+        "src": "33:33:4"
       },
       {
-        "id": 1723,
+        "id": 1842,
         "literals": [
           "solidity",
           ">=",
-          "0.8",
+          "0.6",
           ".0"
         ],
         "nodeType": "PragmaDirective",
-        "src": "66:24:4"
+        "src": "68:24:4"
       },
       {
         "abstract": false,
@@ -735,109 +735,109 @@
         "contractDependencies": [],
         "contractKind": "contract",
         "fullyImplemented": true,
-        "id": 1777,
+        "id": 1896,
         "linearizedBaseContracts": [
-          1777
+          1896
         ],
         "name": "SurveyInterface",
-        "nameLocation": "101:15:4",
+        "nameLocation": "105:15:4",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "canonicalName": "SurveyInterface.Status",
-            "id": 1727,
+            "id": 1846,
             "members": [
               {
-                "id": 1724,
+                "id": 1843,
                 "name": "NOT_OPENED",
-                "nameLocation": "139:10:4",
+                "nameLocation": "145:10:4",
                 "nodeType": "EnumValue",
-                "src": "139:10:4"
+                "src": "145:10:4"
               },
               {
-                "id": 1725,
+                "id": 1844,
                 "name": "OPEN",
-                "nameLocation": "155:4:4",
+                "nameLocation": "162:4:4",
                 "nodeType": "EnumValue",
-                "src": "155:4:4"
+                "src": "162:4:4"
               },
               {
-                "id": 1726,
+                "id": 1845,
                 "name": "FINISHED",
-                "nameLocation": "165:8:4",
+                "nameLocation": "173:8:4",
                 "nodeType": "EnumValue",
-                "src": "165:8:4"
+                "src": "173:8:4"
               }
             ],
             "name": "Status",
-            "nameLocation": "126:6:4",
+            "nameLocation": "131:6:4",
             "nodeType": "EnumDefinition",
-            "src": "121:56:4"
+            "src": "126:60:4"
           },
           {
             "canonicalName": "SurveyInterface.QuestionType",
-            "id": 1731,
+            "id": 1850,
             "members": [
               {
-                "id": 1728,
+                "id": 1847,
                 "name": "MULTIPLE_CHOICE",
-                "nameLocation": "205:15:4",
+                "nameLocation": "217:15:4",
                 "nodeType": "EnumValue",
-                "src": "205:15:4"
+                "src": "217:15:4"
               },
               {
-                "id": 1729,
+                "id": 1848,
                 "name": "RATE",
-                "nameLocation": "226:4:4",
+                "nameLocation": "239:4:4",
                 "nodeType": "EnumValue",
-                "src": "226:4:4"
+                "src": "239:4:4"
               },
               {
-                "id": 1730,
+                "id": 1849,
                 "name": "TEXT",
-                "nameLocation": "236:4:4",
+                "nameLocation": "250:4:4",
                 "nodeType": "EnumValue",
-                "src": "236:4:4"
+                "src": "250:4:4"
               }
             ],
             "name": "QuestionType",
-            "nameLocation": "186:12:4",
+            "nameLocation": "197:12:4",
             "nodeType": "EnumDefinition",
-            "src": "181:63:4"
+            "src": "192:67:4"
           },
           {
             "canonicalName": "SurveyInterface.Question",
-            "id": 1746,
+            "id": 1865,
             "members": [
               {
                 "constant": false,
-                "id": 1734,
+                "id": 1853,
                 "mutability": "mutable",
                 "name": "questionType",
-                "nameLocation": "283:12:4",
+                "nameLocation": "301:12:4",
                 "nodeType": "VariableDeclaration",
-                "scope": 1746,
-                "src": "270:25:4",
+                "scope": 1865,
+                "src": "288:25:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_enum$_QuestionType_$1731",
+                  "typeIdentifier": "t_enum$_QuestionType_$1850",
                   "typeString": "enum SurveyInterface.QuestionType"
                 },
                 "typeName": {
-                  "id": 1733,
+                  "id": 1852,
                   "nodeType": "UserDefinedTypeName",
                   "pathNode": {
-                    "id": 1732,
+                    "id": 1851,
                     "name": "QuestionType",
                     "nodeType": "IdentifierPath",
-                    "referencedDeclaration": 1731,
-                    "src": "270:12:4"
+                    "referencedDeclaration": 1850,
+                    "src": "288:12:4"
                   },
-                  "referencedDeclaration": 1731,
-                  "src": "270:12:4",
+                  "referencedDeclaration": 1850,
+                  "src": "288:12:4",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_enum$_QuestionType_$1731",
+                    "typeIdentifier": "t_enum$_QuestionType_$1850",
                     "typeString": "enum SurveyInterface.QuestionType"
                   }
                 },
@@ -845,13 +845,13 @@
               },
               {
                 "constant": false,
-                "id": 1736,
+                "id": 1855,
                 "mutability": "mutable",
                 "name": "worth",
-                "nameLocation": "306:5:4",
+                "nameLocation": "325:5:4",
                 "nodeType": "VariableDeclaration",
-                "scope": 1746,
-                "src": "301:10:4",
+                "scope": 1865,
+                "src": "320:10:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -859,10 +859,10 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 1735,
+                  "id": 1854,
                   "name": "uint",
                   "nodeType": "ElementaryTypeName",
-                  "src": "301:4:4",
+                  "src": "320:4:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -872,13 +872,13 @@
               },
               {
                 "constant": false,
-                "id": 1738,
+                "id": 1857,
                 "mutability": "mutable",
                 "name": "required",
-                "nameLocation": "322:8:4",
+                "nameLocation": "342:8:4",
                 "nodeType": "VariableDeclaration",
-                "scope": 1746,
-                "src": "317:13:4",
+                "scope": 1865,
+                "src": "337:13:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -886,10 +886,10 @@
                   "typeString": "bool"
                 },
                 "typeName": {
-                  "id": 1737,
+                  "id": 1856,
                   "name": "bool",
                   "nodeType": "ElementaryTypeName",
-                  "src": "317:4:4",
+                  "src": "337:4:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_bool",
                     "typeString": "bool"
@@ -899,13 +899,13 @@
               },
               {
                 "constant": false,
-                "id": 1740,
+                "id": 1859,
                 "mutability": "mutable",
                 "name": "title",
-                "nameLocation": "343:5:4",
+                "nameLocation": "364:5:4",
                 "nodeType": "VariableDeclaration",
-                "scope": 1746,
-                "src": "336:12:4",
+                "scope": 1865,
+                "src": "357:12:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -913,10 +913,10 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 1739,
+                  "id": 1858,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
-                  "src": "336:6:4",
+                  "src": "357:6:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_string_storage_ptr",
                     "typeString": "string"
@@ -926,13 +926,13 @@
               },
               {
                 "constant": false,
-                "id": 1742,
+                "id": 1861,
                 "mutability": "mutable",
                 "name": "description",
-                "nameLocation": "361:11:4",
+                "nameLocation": "383:11:4",
                 "nodeType": "VariableDeclaration",
-                "scope": 1746,
-                "src": "354:18:4",
+                "scope": 1865,
+                "src": "376:18:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -940,10 +940,10 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 1741,
+                  "id": 1860,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
-                  "src": "354:6:4",
+                  "src": "376:6:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_string_storage_ptr",
                     "typeString": "string"
@@ -953,13 +953,13 @@
               },
               {
                 "constant": false,
-                "id": 1745,
+                "id": 1864,
                 "mutability": "mutable",
                 "name": "choices",
-                "nameLocation": "387:7:4",
+                "nameLocation": "410:7:4",
                 "nodeType": "VariableDeclaration",
-                "scope": 1746,
-                "src": "378:16:4",
+                "scope": 1865,
+                "src": "401:16:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -968,18 +968,18 @@
                 },
                 "typeName": {
                   "baseType": {
-                    "id": 1743,
+                    "id": 1862,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
-                    "src": "378:6:4",
+                    "src": "401:6:4",
                     "typeDescriptions": {
                       "typeIdentifier": "t_string_storage_ptr",
                       "typeString": "string"
                     }
                   },
-                  "id": 1744,
+                  "id": 1863,
                   "nodeType": "ArrayTypeName",
-                  "src": "378:8:4",
+                  "src": "401:8:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_array$_t_string_storage_$dyn_storage_ptr",
                     "typeString": "string[]"
@@ -989,25 +989,25 @@
               }
             ],
             "name": "Question",
-            "nameLocation": "255:8:4",
+            "nameLocation": "272:8:4",
             "nodeType": "StructDefinition",
-            "scope": 1777,
-            "src": "248:151:4",
+            "scope": 1896,
+            "src": "265:158:4",
             "visibility": "public"
           },
           {
             "canonicalName": "SurveyInterface.LiquidityPool",
-            "id": 1755,
+            "id": 1874,
             "members": [
               {
                 "constant": false,
-                "id": 1748,
+                "id": 1867,
                 "mutability": "mutable",
                 "name": "tokenAmount",
-                "nameLocation": "435:11:4",
+                "nameLocation": "462:11:4",
                 "nodeType": "VariableDeclaration",
-                "scope": 1755,
-                "src": "430:16:4",
+                "scope": 1874,
+                "src": "457:16:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -1015,10 +1015,10 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 1747,
+                  "id": 1866,
                   "name": "uint",
                   "nodeType": "ElementaryTypeName",
-                  "src": "430:4:4",
+                  "src": "457:4:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -1028,13 +1028,13 @@
               },
               {
                 "constant": false,
-                "id": 1750,
+                "id": 1869,
                 "mutability": "mutable",
                 "name": "gasAmount",
-                "nameLocation": "457:9:4",
+                "nameLocation": "485:9:4",
                 "nodeType": "VariableDeclaration",
-                "scope": 1755,
-                "src": "452:14:4",
+                "scope": 1874,
+                "src": "480:14:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -1042,10 +1042,10 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 1749,
+                  "id": 1868,
                   "name": "uint",
                   "nodeType": "ElementaryTypeName",
-                  "src": "452:4:4",
+                  "src": "480:4:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -1055,13 +1055,13 @@
               },
               {
                 "constant": false,
-                "id": 1752,
+                "id": 1871,
                 "mutability": "mutable",
                 "name": "totalGasSent",
-                "nameLocation": "477:12:4",
+                "nameLocation": "506:12:4",
                 "nodeType": "VariableDeclaration",
-                "scope": 1755,
-                "src": "472:17:4",
+                "scope": 1874,
+                "src": "501:17:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -1069,10 +1069,10 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 1751,
+                  "id": 1870,
                   "name": "uint",
                   "nodeType": "ElementaryTypeName",
-                  "src": "472:4:4",
+                  "src": "501:4:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -1082,13 +1082,13 @@
               },
               {
                 "constant": false,
-                "id": 1754,
+                "id": 1873,
                 "mutability": "mutable",
                 "name": "totalTokensSent",
-                "nameLocation": "500:15:4",
+                "nameLocation": "530:15:4",
                 "nodeType": "VariableDeclaration",
-                "scope": 1755,
-                "src": "495:20:4",
+                "scope": 1874,
+                "src": "525:20:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -1096,10 +1096,10 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 1753,
+                  "id": 1872,
                   "name": "uint",
                   "nodeType": "ElementaryTypeName",
-                  "src": "495:4:4",
+                  "src": "525:4:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -1109,25 +1109,25 @@
               }
             ],
             "name": "LiquidityPool",
-            "nameLocation": "410:13:4",
+            "nameLocation": "436:13:4",
             "nodeType": "StructDefinition",
-            "scope": 1777,
-            "src": "403:117:4",
+            "scope": 1896,
+            "src": "429:122:4",
             "visibility": "public"
           },
           {
             "canonicalName": "SurveyInterface.SurveyBasic",
-            "id": 1762,
+            "id": 1881,
             "members": [
               {
                 "constant": false,
-                "id": 1757,
+                "id": 1876,
                 "mutability": "mutable",
                 "name": "name",
-                "nameLocation": "556:4:4",
+                "nameLocation": "590:4:4",
                 "nodeType": "VariableDeclaration",
-                "scope": 1762,
-                "src": "549:11:4",
+                "scope": 1881,
+                "src": "583:11:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -1135,10 +1135,10 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 1756,
+                  "id": 1875,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
-                  "src": "549:6:4",
+                  "src": "583:6:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_string_storage_ptr",
                     "typeString": "string"
@@ -1148,13 +1148,13 @@
               },
               {
                 "constant": false,
-                "id": 1759,
+                "id": 1878,
                 "mutability": "mutable",
                 "name": "description",
-                "nameLocation": "573:11:4",
+                "nameLocation": "608:11:4",
                 "nodeType": "VariableDeclaration",
-                "scope": 1762,
-                "src": "566:18:4",
+                "scope": 1881,
+                "src": "601:18:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -1162,10 +1162,10 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 1758,
+                  "id": 1877,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
-                  "src": "566:6:4",
+                  "src": "601:6:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_string_storage_ptr",
                     "typeString": "string"
@@ -1175,13 +1175,13 @@
               },
               {
                 "constant": false,
-                "id": 1761,
+                "id": 1880,
                 "mutability": "mutable",
                 "name": "bonusAmount",
-                "nameLocation": "614:11:4",
+                "nameLocation": "651:11:4",
                 "nodeType": "VariableDeclaration",
-                "scope": 1762,
-                "src": "609:16:4",
+                "scope": 1881,
+                "src": "646:16:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -1189,10 +1189,10 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 1760,
+                  "id": 1879,
                   "name": "uint",
                   "nodeType": "ElementaryTypeName",
-                  "src": "609:4:4",
+                  "src": "646:4:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -1202,45 +1202,45 @@
               }
             ],
             "name": "SurveyBasic",
-            "nameLocation": "531:11:4",
+            "nameLocation": "564:11:4",
             "nodeType": "StructDefinition",
-            "scope": 1777,
-            "src": "524:106:4",
+            "scope": 1896,
+            "src": "557:111:4",
             "visibility": "public"
           },
           {
             "canonicalName": "SurveyInterface.SurveyBuild",
-            "id": 1776,
+            "id": 1895,
             "members": [
               {
                 "constant": false,
-                "id": 1765,
+                "id": 1884,
                 "mutability": "mutable",
                 "name": "info",
-                "nameLocation": "671:4:4",
+                "nameLocation": "712:4:4",
                 "nodeType": "VariableDeclaration",
-                "scope": 1776,
-                "src": "659:16:4",
+                "scope": 1895,
+                "src": "700:16:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_struct$_SurveyBasic_$1762_storage_ptr",
+                  "typeIdentifier": "t_struct$_SurveyBasic_$1881_storage_ptr",
                   "typeString": "struct SurveyInterface.SurveyBasic"
                 },
                 "typeName": {
-                  "id": 1764,
+                  "id": 1883,
                   "nodeType": "UserDefinedTypeName",
                   "pathNode": {
-                    "id": 1763,
+                    "id": 1882,
                     "name": "SurveyBasic",
                     "nodeType": "IdentifierPath",
-                    "referencedDeclaration": 1762,
-                    "src": "659:11:4"
+                    "referencedDeclaration": 1881,
+                    "src": "700:11:4"
                   },
-                  "referencedDeclaration": 1762,
-                  "src": "659:11:4",
+                  "referencedDeclaration": 1881,
+                  "src": "700:11:4",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_struct$_SurveyBasic_$1762_storage_ptr",
+                    "typeIdentifier": "t_struct$_SurveyBasic_$1881_storage_ptr",
                     "typeString": "struct SurveyInterface.SurveyBasic"
                   }
                 },
@@ -1248,33 +1248,33 @@
               },
               {
                 "constant": false,
-                "id": 1768,
+                "id": 1887,
                 "mutability": "mutable",
                 "name": "pool",
-                "nameLocation": "724:4:4",
+                "nameLocation": "767:4:4",
                 "nodeType": "VariableDeclaration",
-                "scope": 1776,
-                "src": "710:18:4",
+                "scope": 1895,
+                "src": "753:18:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_struct$_LiquidityPool_$1755_storage_ptr",
+                  "typeIdentifier": "t_struct$_LiquidityPool_$1874_storage_ptr",
                   "typeString": "struct SurveyInterface.LiquidityPool"
                 },
                 "typeName": {
-                  "id": 1767,
+                  "id": 1886,
                   "nodeType": "UserDefinedTypeName",
                   "pathNode": {
-                    "id": 1766,
+                    "id": 1885,
                     "name": "LiquidityPool",
                     "nodeType": "IdentifierPath",
-                    "referencedDeclaration": 1755,
-                    "src": "710:13:4"
+                    "referencedDeclaration": 1874,
+                    "src": "753:13:4"
                   },
-                  "referencedDeclaration": 1755,
-                  "src": "710:13:4",
+                  "referencedDeclaration": 1874,
+                  "src": "753:13:4",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_struct$_LiquidityPool_$1755_storage_ptr",
+                    "typeIdentifier": "t_struct$_LiquidityPool_$1874_storage_ptr",
                     "typeString": "struct SurveyInterface.LiquidityPool"
                   }
                 },
@@ -1282,13 +1282,13 @@
               },
               {
                 "constant": false,
-                "id": 1770,
+                "id": 1889,
                 "mutability": "mutable",
                 "name": "surveysTaken",
-                "nameLocation": "739:12:4",
+                "nameLocation": "783:12:4",
                 "nodeType": "VariableDeclaration",
-                "scope": 1776,
-                "src": "734:17:4",
+                "scope": 1895,
+                "src": "778:17:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -1296,10 +1296,10 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 1769,
+                  "id": 1888,
                   "name": "uint",
                   "nodeType": "ElementaryTypeName",
-                  "src": "734:4:4",
+                  "src": "778:4:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -1309,33 +1309,33 @@
               },
               {
                 "constant": false,
-                "id": 1773,
+                "id": 1892,
                 "mutability": "mutable",
                 "name": "status",
-                "nameLocation": "764:6:4",
+                "nameLocation": "809:6:4",
                 "nodeType": "VariableDeclaration",
-                "scope": 1776,
-                "src": "757:13:4",
+                "scope": 1895,
+                "src": "802:13:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_enum$_Status_$1727",
+                  "typeIdentifier": "t_enum$_Status_$1846",
                   "typeString": "enum SurveyInterface.Status"
                 },
                 "typeName": {
-                  "id": 1772,
+                  "id": 1891,
                   "nodeType": "UserDefinedTypeName",
                   "pathNode": {
-                    "id": 1771,
+                    "id": 1890,
                     "name": "Status",
                     "nodeType": "IdentifierPath",
-                    "referencedDeclaration": 1727,
-                    "src": "757:6:4"
+                    "referencedDeclaration": 1846,
+                    "src": "802:6:4"
                   },
-                  "referencedDeclaration": 1727,
-                  "src": "757:6:4",
+                  "referencedDeclaration": 1846,
+                  "src": "802:6:4",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_enum$_Status_$1727",
+                    "typeIdentifier": "t_enum$_Status_$1846",
                     "typeString": "enum SurveyInterface.Status"
                   }
                 },
@@ -1343,13 +1343,13 @@
               },
               {
                 "constant": false,
-                "id": 1775,
+                "id": 1894,
                 "mutability": "mutable",
                 "name": "creator",
-                "nameLocation": "784:7:4",
+                "nameLocation": "830:7:4",
                 "nodeType": "VariableDeclaration",
-                "scope": 1776,
-                "src": "776:15:4",
+                "scope": 1895,
+                "src": "822:15:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -1357,10 +1357,10 @@
                   "typeString": "address"
                 },
                 "typeName": {
-                  "id": 1774,
+                  "id": 1893,
                   "name": "address",
                   "nodeType": "ElementaryTypeName",
-                  "src": "776:7:4",
+                  "src": "822:7:4",
                   "stateMutability": "nonpayable",
                   "typeDescriptions": {
                     "typeIdentifier": "t_address",
@@ -1371,19 +1371,19 @@
               }
             ],
             "name": "SurveyBuild",
-            "nameLocation": "641:11:4",
+            "nameLocation": "681:11:4",
             "nodeType": "StructDefinition",
-            "scope": 1777,
-            "src": "634:162:4",
+            "scope": 1896,
+            "src": "674:169:4",
             "visibility": "public"
           }
         ],
-        "scope": 1778,
-        "src": "92:706:4",
+        "scope": 1897,
+        "src": "96:750:4",
         "usedErrors": []
       }
     ],
-    "src": "32:766:4"
+    "src": "33:813:4"
   },
   "compiler": {
     "name": "solc",
@@ -1391,7 +1391,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.3",
-  "updatedAt": "2021-09-03T04:32:36.983Z",
+  "updatedAt": "2021-09-04T07:26:41.485Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},

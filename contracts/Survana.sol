@@ -31,7 +31,8 @@ contract Survana is Ownable, SurveyInterface {
   mapping (address => bool) public creators;
   Token public token;
   mapping (uint => address) public surveys;
-  uint surveyCount = 0;
+  uint public surveyCount = 0;
+  mapping (Status => uint) public statusCounts;
 
   mapping (address => uint) public creatorSurveyCount;
 
@@ -41,7 +42,7 @@ contract Survana is Ownable, SurveyInterface {
 
 
   modifier isCreator() {
-    require(creators[msg.sender] == true);
+    require(creators[msg.sender] == true, "Must be creator");
     _;
   }
 
@@ -129,31 +130,34 @@ contract Survana is Ownable, SurveyInterface {
   }
 
   function depositToSurveyTokenPool(uint _id, uint _amount) external isCreator {
-    require(_amount > 0);
+    require(_amount > 0, "amount has to be greater than zero");
     Survey s = Survey(surveys[_id]);
-    require(bytes(s.name()).length > 0);
+    require(bytes(s.name()).length > 0, "Length of string needs to be greater than zero");
     s.depositToSurveyTokenPool(token, _amount);
     emit DepositedTokensToPool(msg.sender, _id, _amount);
   }
 
-  function depositToSurveyGasPool(uint _id) external isCreator payable {
-    require(msg.value > 0);
+  function depositToSurveyGasPool(uint _id) external payable isCreator {
+    require(msg.value > 0, "Value needs to be > 0");
     Survey s = Survey(surveys[_id]);
-    address payable _addr = payable(surveys[_id]);
-    _addr.transfer(msg.value);
-    s.depositToSurveyGasPool(msg.value);
+    // address payable _addr = payable(address(s));
+    // _addr.transfer(msg.value);
+    // (bool sent, bytes memory data) = _addr.call{value: msg.value}("");
+    // bool sent = _addr.send(msg.value);
+    s.depositToSurveyGasPool{value: msg.value}();
+    // require(sent, "Failed to send Ether");
     emit DepositedGasToPool(msg.sender, _id, msg.value);
   }
 
   function withdrawFromTokenPool(uint _id, uint _amount) external isCreator {
-    require(_amount > 0);
+    require(_amount > 0, "amount has to be greater than zero");
     Survey s = Survey(surveys[_id]);
     s.withdrawFromTokenPool(token, _amount);
     emit WithdrawFromTokenPool(msg.sender, _id, _amount);
   }
 
   function withdrawFromGasPool(uint _id, uint _amount) external isCreator {
-    require(_amount > 0);
+    require(_amount > 0, "amount has to be greater than zero");
     Survey s = Survey(surveys[_id]);
     s.withdrawFromGasPool(_amount);
     emit WithdrawFromGasPool(msg.sender, _id, _amount);
@@ -167,6 +171,7 @@ contract Survana is Ownable, SurveyInterface {
     Survey s = new Survey(msg.sender, _name, _description, _bonusAmount);
     address newContract = address(s);
     surveys[surveyCount] = newContract;
+    statusCounts[Status.NOT_OPENED]++;
     emit SurveyCreated(msg.sender, newContract, surveyCount);
     surveyCount++;
     creatorSurveyCount[msg.sender] = surveyCount;
@@ -214,18 +219,27 @@ contract Survana is Ownable, SurveyInterface {
 
   function setSurveyStatus(uint _id, Status _status) external isCreator {
     Survey s = Survey(surveys[_id]);
+    Status old = s.status();
     s.setSurveyStatus(_status);
+    statusCounts[old]--;
+    statusCounts[_status]++;
     emit SurveyStatusChanged(_status, _id);
   }
-
 
   function submitSurvey(
     uint _id,
     string[] calldata _answers
-  ) external isCreator {
+  ) external {
+    require(_id < surveyCount && _id >= 0, "ID must exist");
     uint gas = gasleft();
     Survey s = Survey(surveys[_id]);
+    Status oldS = s.status();
     uint reward = s.submitSurvey(gas, token, _answers);
+    Status newS = s.status();
+    if (newS != oldS) {
+      statusCounts[oldS]--;
+      statusCounts[newS]++;
+    }
     emit SurveySubmited(msg.sender, _id, reward);
   }
 
@@ -244,7 +258,8 @@ contract Survana is Ownable, SurveyInterface {
   }
 
   function getOpenSurveys() external view returns (SurveyBasic[] memory) {
-    SurveyBasic[] memory _tmp = new SurveyBasic[](surveyCount);
+    SurveyBasic[] memory _tmp = new SurveyBasic[](statusCounts[Status.OPEN]);
+    // require(_tmp.length == 0, "LENGTH IS MORE THAN 0");
     uint count = 0;
     for (uint256 index = 0; index < surveyCount; index++) {
       Survey s = Survey(surveys[index]);
@@ -252,6 +267,14 @@ contract Survana is Ownable, SurveyInterface {
         _tmp[count] = s.info();
         count++;
       }
+    }
+    if (_tmp.length > count) {
+      //re-copy over everything to remove blank enties
+      SurveyBasic[] memory ret = new SurveyBasic[](count);
+      for (uint256 index = 0; index < count; index++) {
+        ret[index] = _tmp[index];
+      }
+      return ret;
     }
     return _tmp;
   }
@@ -261,10 +284,18 @@ contract Survana is Ownable, SurveyInterface {
     uint count = 0;
     for (uint256 index = 0; index < surveyCount; index++) {
       Survey s = Survey(surveys[index]);
-      if (s.status() == Status.FINISHED && s.didUserTakeSurvey(msg.sender)) {
+      if (s.didUserTakeSurvey(msg.sender)) {
         _tmp[count] = s.info();
         count++;
       }
+    }
+    if (_tmp.length > count) {
+      //re-copy over everything to remove blank enties
+      SurveyBasic[] memory ret = new SurveyBasic[](count);
+      for (uint256 index = 0; index < count; index++) {
+        ret[index] = _tmp[index];
+      }
+      return ret;
     }
     return _tmp;
   }

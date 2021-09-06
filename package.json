@@ -2,26 +2,40 @@
   "name": "survana",
   "version": "1.0.0",
   "description": "Survey dApp demo.",
-  "main": "truffle-config.js",
   "directories": {
     "test": "test"
   },
+  "main": "truffle-config.js",
   "scripts": {
+    "start": "parcel src/index.html",
+    "build": "parcel build --public-url / --no-cache src/index.html",
+    "heroku-postbuild": "parcel --version",
+    "serve": "node server/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "browserslist": "> 0.5%, last 2 versions, not dead",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/surgery18/survana.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Scott Deutsch",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/surgery18/survana/issues"
   },
   "homepage": "https://github.com/surgery18/survana#readme",
   "dependencies": {
+    "@parcel/transformer-vue": "^2.0.0-rc.0",
+    "bootstrap": "^5.1.0",
+    "bootstrap-icons": "^1.5.0",
     "chai": "^4.3.4",
-    "chai-as-promised": "^7.1.1"
+    "chai-as-promised": "^7.1.1",
+    "express": "^4.17.1",
+    "parcel": "^2.0.0-rc.0",
+    "vue": "^3.2.6",
+    "vue-loading-overlay": "^4.0.4",
+    "vuex": "^4.0.2",
+    "web3": "^1.5.2"
   }
 }

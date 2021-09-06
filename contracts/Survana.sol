@@ -33,8 +33,12 @@ contract Survana is Ownable, SurveyInterface {
   mapping (uint => address) public surveys;
   uint public surveyCount = 0;
   mapping (Status => uint) public statusCounts;
-
   mapping (address => uint) public creatorSurveyCount;
+
+  //TODO store totalTokensRewards by address sp we cam show it on the site
+  //Refactor contracts
+  //add selfdestruct to survey (a way to delete surveys they accidently made)
+  //more?
 
   constructor(Token _token) {
     token = _token;
@@ -115,11 +119,7 @@ contract Survana is Ownable, SurveyInterface {
     uint _id
   );
 
-  event TokenChanged(
-    Token _token
-  );
-
-  function addCreator(address _addr) external onlyOwner {
+  function addCreator(address _addr) external {
     creators[_addr] = true;
     emit AddedCreator(_addr);
   }
@@ -140,12 +140,7 @@ contract Survana is Ownable, SurveyInterface {
   function depositToSurveyGasPool(uint _id) external payable isCreator {
     require(msg.value > 0, "Value needs to be > 0");
     Survey s = Survey(surveys[_id]);
-    // address payable _addr = payable(address(s));
-    // _addr.transfer(msg.value);
-    // (bool sent, bytes memory data) = _addr.call{value: msg.value}("");
-    // bool sent = _addr.send(msg.value);
     s.depositToSurveyGasPool{value: msg.value}();
-    // require(sent, "Failed to send Ether");
     emit DepositedGasToPool(msg.sender, _id, msg.value);
   }
 
@@ -243,34 +238,25 @@ contract Survana is Ownable, SurveyInterface {
     emit SurveySubmited(msg.sender, _id, reward);
   }
 
-  function getCreatorSurveys() external view returns (SurveyBasic[] memory) {
-    require(creators[msg.sender] == true);
-    SurveyBasic[] memory _tmp = new SurveyBasic[](creatorSurveyCount[msg.sender]);
-    uint count = 0;
-    for (uint256 index = 0; index < surveyCount; index++) {
-      Survey s = Survey(surveys[index]);
-      if (s.creator() == msg.sender) {
-        _tmp[count] = s.info();
-        count++;
-      }
-    }
-    return _tmp;
-  }
-
-  function getOpenSurveys() external view returns (SurveyBasic[] memory) {
-    SurveyBasic[] memory _tmp = new SurveyBasic[](statusCounts[Status.OPEN]);
+  function _getSurveyOverviews(uint arrayCount, bool openAndNotCreator, bool userFinished, bool isCreators) private view returns (SurveyOverview[] memory) {
+    SurveyOverview[] memory _tmp = new SurveyOverview[](arrayCount);
     // require(_tmp.length == 0, "LENGTH IS MORE THAN 0");
     uint count = 0;
     for (uint256 index = 0; index < surveyCount; index++) {
       Survey s = Survey(surveys[index]);
-      if (s.status() == Status.OPEN && s.creator() != msg.sender) {
-        _tmp[count] = s.info();
+      bool check1 = !openAndNotCreator || (openAndNotCreator && s.status() == Status.OPEN && s.creator() != msg.sender);
+      bool check2 = !userFinished || (userFinished && s.didUserTakeSurvey(msg.sender));
+      bool check3 = !isCreators || (isCreators && s.creator() == msg.sender);
+      if (check1 && check2 && check3) {
+        SurveyOverview memory so = s.getOverview();
+        so.id = index;
+        _tmp[count] = so;
         count++;
       }
     }
     if (_tmp.length > count) {
       //re-copy over everything to remove blank enties
-      SurveyBasic[] memory ret = new SurveyBasic[](count);
+      SurveyOverview[] memory ret = new SurveyOverview[](count);
       for (uint256 index = 0; index < count; index++) {
         ret[index] = _tmp[index];
       }
@@ -279,29 +265,19 @@ contract Survana is Ownable, SurveyInterface {
     return _tmp;
   }
 
-  function getUserFinishedSurveys() external view returns (SurveyBasic[] memory) {
-    SurveyBasic[] memory _tmp = new SurveyBasic[](surveyCount);
-    uint count = 0;
-    for (uint256 index = 0; index < surveyCount; index++) {
-      Survey s = Survey(surveys[index]);
-      if (s.didUserTakeSurvey(msg.sender)) {
-        _tmp[count] = s.info();
-        count++;
-      }
-    }
-    if (_tmp.length > count) {
-      //re-copy over everything to remove blank enties
-      SurveyBasic[] memory ret = new SurveyBasic[](count);
-      for (uint256 index = 0; index < count; index++) {
-        ret[index] = _tmp[index];
-      }
-      return ret;
-    }
-    return _tmp;
+  function getCreatorSurveys() external view returns (SurveyOverview[] memory) {
+    return _getSurveyOverviews(creatorSurveyCount[msg.sender], false, false, true);
+  }
+
+  function getOpenSurveys() external view returns (SurveyOverview[] memory) {
+    return _getSurveyOverviews(statusCounts[Status.OPEN], true, false, false);
+  }
+
+  function getUserFinishedSurveys() external view returns (SurveyOverview[] memory) {
+    return _getSurveyOverviews(surveyCount, false, true, false);
   }
 
   function setToken(Token _token) external onlyOwner {
     token = _token;
-    emit TokenChanged(_token);
   }
 }

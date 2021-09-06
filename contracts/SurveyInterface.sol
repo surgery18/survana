@@ -46,4 +46,21 @@ contract SurveyInterface {
     Status status;
     address creator;
   }
+
+
+  //only for get creator survey function
+  struct SurveyOverview {
+    uint id;
+    address addr;
+    uint worth;
+    uint bonusAmount;
+    string name;
+    string description;
+    Status status;
+    uint taken;
+    uint gasLeft;
+    uint tokensLeft;
+    uint questionCount;
+    // uint tokensSent;
+  }
 }

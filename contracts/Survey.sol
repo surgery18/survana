@@ -20,19 +20,9 @@ contract Survey is SurveyInterface {
   event SurveyStatusChanged(
     Status _status
   );
-
-  // constructor(SurveyBuild memory _b, Question[] memory _q) public {
-  //   build = _b;
-  //   for (uint i = 0; i < _q.length; i++) {
-  //     questions[i] = _q[i];
-  //   }
-  // }
   
   constructor(address _creator, string memory _name, string memory _description, uint _bonusAmount) {
-    // build = _b;
-    // for (uint i = 0; i < _q.length; i++) {
-    //   questions[i] = _q[i];
-    // }
+
     build.info.name = _name;
     build.info.description = _description;
     build.info.bonusAmount = _bonusAmount;
@@ -125,13 +115,15 @@ contract Survey is SurveyInterface {
     return reward;
   }
 
+  //find a way to eliminate these functions
+  ////////////////////////////////////////////////////////////////
   function name() view external returns (string memory) {
     return build.info.name;
   }
 
-  function description() view external returns (string memory) {
-    return build.info.description;
-  }
+  // function description() view external returns (string memory) {
+  //   return build.info.description;
+  // }
 
   function bonusAmount() view external returns (uint) {
     return build.info.bonusAmount;
@@ -152,9 +144,26 @@ contract Survey is SurveyInterface {
   function pool() view external returns (LiquidityPool memory) {
     return build.pool;
   }
+  ////////////////////////////////////////////////////////////////
 
   function getBalance() view external returns (uint) {
     return address(this).balance;
+  }
+
+  function getOverview() view external returns (SurveyOverview memory) {
+    return SurveyOverview({
+      id: 0,
+      addr: address(this),
+      worth: worth(),
+      bonusAmount: build.info.bonusAmount,
+      name: build.info.name,
+      description: build.info.description,
+      status: build.status,
+      taken: build.surveysTaken,
+      gasLeft: build.pool.gasAmount,
+      tokensLeft: build.pool.tokenAmount,
+      questionCount: questionCount
+    });
   }
 
   function worth() view public returns (uint) {
@@ -174,21 +183,22 @@ contract Survey is SurveyInterface {
     return q;
   }
 
-  function getUserAnswers() external view returns (string[] memory) {
-    uint index = userAnswers[tx.origin] - 1;
-    require(index >= 0, "No answers found");
-    string[] memory ret = new string[](questionCount);
-    for (uint256 i = 0; i < questionCount; i++) {
-      ret[i] = answers[i][index];
-    }
-    return ret;
-  }
+  // function getUserAnswers() external view returns (string[] memory) {
+  //   uint index = userAnswers[tx.origin] - 1;
+  //   require(index >= 0, "No answers found");
+  //   string[] memory ret = new string[](questionCount);
+  //   for (uint256 i = 0; i < questionCount; i++) {
+  //     ret[i] = answers[i][index];
+  //   }
+  //   return ret;
+  // }
 
   function updateSurvey(
     string memory _name,
     string memory _description,
     uint _bonusAmount
   ) public isCreator {
+    require(build.status == Status.NOT_OPENED, "Survey must be in editing stage");
     build.info.name = _name;
     build.info.description = _description;
     build.info.bonusAmount = _bonusAmount;
@@ -202,6 +212,7 @@ contract Survey is SurveyInterface {
     string memory _qdescription,
     string[] memory _choices
   ) public  isCreator returns (uint) {
+    require(build.status == Status.NOT_OPENED, "Survey must be in editing stage");
     updateQuestion(
       questionCount,
       _qtypes,
@@ -225,6 +236,7 @@ contract Survey is SurveyInterface {
     string memory _qdescription,
     string[] memory _choices
   ) public isCreator {
+    require(build.status == Status.NOT_OPENED, "Survey must be in editing stage");
     questions[_id] = Question(
       _qtypes,
       _worth,
@@ -241,10 +253,7 @@ contract Survey is SurveyInterface {
     build.pool.tokenAmount += _amount;
   }
 
-  // function depositToSurveyGasPool(uint _value) external isCreator {
   function depositToSurveyGasPool() external payable isCreator {
-  // receive() external payable {
-    // require(tx.origin == build.creator);
     require(msg.value > 0, "amount has to be greater than zero");
     build.pool.gasAmount += msg.value;
   }
@@ -267,16 +276,6 @@ contract Survey is SurveyInterface {
   function didUserTakeSurvey(address _addr) view public returns (bool) {
     uint index = userAnswers[_addr];
     if (index > 0) {
-      // index--;
-      // for (uint i = 0; i < questionCount; i++) {
-      //   string[] memory s = answers[i];
-      //   if (s.length > 0 && s.length > index) {
-      //     string memory a = s[index];
-      //     if (bytes(a).length > 0) {
-      //       return true;
-      //     }
-      //   }
-      // }
       return true;
     }
     return false;

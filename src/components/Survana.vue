@@ -62,11 +62,11 @@ export default {
         }
 
         //find out if they are the owner?
-        const owner = await this.survanaContract.methods.owner().call({from: this.walletAddress})
-        console.log(owner, walletAddress)
-        if (owner.toString() === walletAddress.toString()) {
-            this.setUserType('owner')
-        } else {
+        // const owner = await this.survanaContract.methods.owner().call({from: this.walletAddress})
+        // console.log(owner, walletAddress)
+        // if (owner.toString() === walletAddress.toString()) {
+        //     this.setUserType('owner')
+        // } else {
             //no, creator?
             const isCreator = await this.survanaContract.methods.creators(walletAddress).call({from: this.walletAddress})
             // console.log(isCreator)
@@ -76,7 +76,7 @@ export default {
                 this.setUserType("user")
             }
 
-        }
+        // }
         loader.hide()
         this.setContractLoaded(true)
 

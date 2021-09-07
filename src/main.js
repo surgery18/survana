@@ -15,7 +15,7 @@ const store = createStore({
             walletAddress: "",
             userType: "",
             pageTitle: "Surveys",
-            page: 1,
+            page: 0,
             survanaContract: null,
             tokenContract: null,
             contractsLoaded: false,

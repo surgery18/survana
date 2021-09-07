@@ -176,7 +176,7 @@
             </template>
             <template v-slot:body>
                 <div v-if="!lp.approving">
-                    <h2>Tokens: {{lp.tokens}}</h2>
+                    <h2>PANGO Tokens: {{lp.tokens}}</h2>
                     <h2>Gas: {{lp.gas}}</h2>
                     <h5>Balance: {{lp.tokenBalance}}</h5>
                     <div class="mb-3 input-group">
@@ -191,6 +191,9 @@
                         <input type="number" min="0" class="form-control" v-model="lp.ethInput" />
                         <button type="button" class="btn btn-outline-success" @click="deposit('eth')">Deposit</button>
                         <button type="button" class="btn btn-outline-danger" @click="withdraw('eth')">Withdraw</button>
+                    </div>
+                    <div>
+                        <small>Get Tokens here <a href="https://swap-thang.herokuapp.com/">https://swap-thang.herokuapp.com/</a></small>
                     </div>
                 </div>
                 <div v-else>
@@ -231,7 +234,7 @@
 
 <script>
 import {mapMutations, mapState} from "vuex"
-import Survey from "../../build/contracts/Survey.json"
+import Survey from "../../build/contracts-final/Survey.json"
 import Modal from "./Modal"
 
 export default {

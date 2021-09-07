@@ -5,7 +5,6 @@
   "directories": {
     "test": "test"
   },
-  "main": "truffle-config.js",
   "scripts": {
     "start": "parcel src/index.html",
     "build": "parcel build --public-url / --no-cache src/index.html",
@@ -27,13 +26,16 @@
   "homepage": "https://github.com/surgery18/survana#readme",
   "dependencies": {
     "@parcel/transformer-vue": "^2.0.0-rc.0",
+    "@swc/helpers": "^0.2.13",
     "bootstrap": "^5.1.0",
     "bootstrap-icons": "^1.5.0",
     "chai": "^4.3.4",
     "chai-as-promised": "^7.1.1",
     "express": "^4.17.1",
     "parcel": "^2.0.0-rc.0",
+    "regenerator-runtime": "^0.13.9",
     "sweetalert2": "^11.1.4",
+    "truffle-hdwallet-provider": "^1.0.17",
     "vue": "^3.2.6",
     "vue-loading-overlay": "^4.0.4",
     "vue-star-rating": "^2.1.0",

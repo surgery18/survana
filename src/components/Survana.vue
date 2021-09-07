@@ -17,8 +17,8 @@
 <script>
 import Web3 from "web3"
 import {mapMutations, mapState} from "vuex"
-import Token from "../../build/contracts/Token.json"
-import Survana from "../../build/contracts/Survana.json"
+import Token from "../../build/contracts-final/Token.json"
+import Survana from "../../build/contracts-final/Survana.json"
 import Creator from './Creator.vue'
 import Surveys from './Surveys.vue'
 import History from './History.vue'

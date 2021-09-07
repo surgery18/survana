@@ -20,7 +20,7 @@
 
 <script>
 import {mapMutations, mapState} from "vuex"
-import Survey from "../../build/contracts/Survey.json"
+// import Survey from "../../build/contracts-final/Survey.json"
 
 export default {
     name: "History",

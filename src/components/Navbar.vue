@@ -5,7 +5,7 @@
                 <ul class="nav me-auto">
                     <li class="nav-item"><a href="#" class="nav-link link-dark px-2 active" @click.prevent="changePage(0)">Surveys</a></li>
                     <li class="nav-item"><a href="#" class="nav-link link-dark px-2" @click.prevent="changePage(1)">Creator</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link link-dark px-2">History</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link link-dark px-2" @click.prevent="changePage(2)">History</a></li>
                     <!-- <li class="nav-item"><a href="#" class="nav-link link-dark px-2" v-if="userType === 'owner'">Admin</a></li> -->
                 </ul>
                 <ul class="nav">
@@ -39,12 +39,13 @@ export default {
     methods: {
         ...mapMutations(['setPageTitle', 'setPage']),
         changePage(p) {
+            this.setPage(p)
             if (p === 0) {
-                this.setPage(0)
                 this.setPageTitle("Surveys")
             } else if (p === 1) {
-                this.setPage(1)
                 this.setPageTitle("Creator")
+            } else if (p === 2) {
+                this.setPageTitle("History")
             }
         }
     }

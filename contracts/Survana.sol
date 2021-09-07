@@ -244,7 +244,7 @@ contract Survana is Ownable, SurveyInterface {
     uint count = 0;
     for (uint256 index = 0; index < surveyCount; index++) {
       Survey s = Survey(surveys[index]);
-      bool check1 = !openAndNotCreator || (openAndNotCreator && s.status() == Status.OPEN && s.creator() != msg.sender);
+      bool check1 = !openAndNotCreator || (openAndNotCreator && s.status() == Status.OPEN && s.creator() != msg.sender && !s.didUserTakeSurvey(msg.sender));
       bool check2 = !userFinished || (userFinished && s.didUserTakeSurvey(msg.sender));
       bool check3 = !isCreators || (isCreators && s.creator() == msg.sender);
       if (check1 && check2 && check3) {

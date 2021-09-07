@@ -7,6 +7,7 @@
            <creator></creator>
         </div>
         <div v-else-if="page === 2">
+            <history></history>
         </div>
         <div v-else>
         </div>
@@ -18,13 +19,13 @@ import Web3 from "web3"
 import {mapMutations, mapState} from "vuex"
 import Token from "../../build/contracts/Token.json"
 import Survana from "../../build/contracts/Survana.json"
-import Survey from "../../build/contracts/Survey.json"
 import Creator from './Creator.vue'
 import Surveys from './Surveys.vue'
+import History from './History.vue'
 
 export default {
     name: "Survana",
-    components: { Creator, Surveys },
+    components: { Creator, Surveys, History },
     async created() {
         const loader = this.$loading.show({loader: 'bars'})
         //init web3
@@ -68,7 +69,7 @@ export default {
         } else {
             //no, creator?
             const isCreator = await this.survanaContract.methods.creators(walletAddress).call({from: this.walletAddress})
-            console.log(isCreator)
+            // console.log(isCreator)
             if (isCreator) {
                 this.setUserType("creator")
             } else {

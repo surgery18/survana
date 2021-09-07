@@ -183,6 +183,11 @@ contract Survey is SurveyInterface {
     return q;
   }
 
+  function getAnswers(uint qid) external view isCreator returns (string[] memory) {
+    string[] memory ret = answers[qid];
+    return ret;
+  }
+
   // function getUserAnswers() external view returns (string[] memory) {
   //   uint index = userAnswers[tx.origin] - 1;
   //   require(index >= 0, "No answers found");

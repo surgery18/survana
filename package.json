@@ -33,8 +33,10 @@
     "chai-as-promised": "^7.1.1",
     "express": "^4.17.1",
     "parcel": "^2.0.0-rc.0",
+    "sweetalert2": "^11.1.4",
     "vue": "^3.2.6",
     "vue-loading-overlay": "^4.0.4",
+    "vue-star-rating": "^2.1.0",
     "vuex": "^4.0.2",
     "web3": "^1.5.2"
   }

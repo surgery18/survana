@@ -2,8 +2,8 @@ import {createApp} from "vue"
 import {createStore} from "vuex"
 import App from "./App.vue"
 
-import VueLoading from 'vue-loading-overlay';
-import 'vue-loading-overlay/dist/vue-loading.css';
+import VueLoading from 'vue-loading-overlay'
+import 'vue-loading-overlay/dist/vue-loading.css'
 
 import "bootstrap/dist/js/bootstrap.bundle.min"
 import "bootstrap/dist/css/bootstrap.min.css"
@@ -15,7 +15,7 @@ const store = createStore({
             walletAddress: "",
             userType: "",
             pageTitle: "Surveys",
-            page: 0,
+            page: 1,
             survanaContract: null,
             tokenContract: null,
             contractsLoaded: false,
@@ -48,5 +48,5 @@ const store = createStore({
 
 const app = createApp(App)
 app.use(store)
-app.use(VueLoading);
+app.use(VueLoading)
 app.mount("#app")

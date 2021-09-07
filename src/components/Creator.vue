@@ -32,9 +32,10 @@
                                 gasLeft: <span v-text="fromWei(row.gasLeft)"></span>
                             </td>
                             <td v-text="row.questionCount"></td>
-                            <td>
+                            <td class="d-flex flex-row flex-wrap justify-content-around">
                                 <button type="button" class="btn btn-sm btn-primary" title="Edit Survey" @click="updateSurvey(row)" v-if="row.status === '0'"><i class="bi bi-pencil-square"></i></button>
-                                <button type="button" class="btn btn-sm btn-primary mx-2" title="Liquidity Pool" @click="LiquidityPool(row)"><i class="bi bi-bank"></i></button>
+                                <button type="button" class="btn btn-sm btn-primary" title="Report" @click="seeReport(row)"><i class="bi bi-clipboard-data"></i></button>
+                                <button type="button" class="btn btn-sm btn-primary" title="Liquidity Pool" @click="LiquidityPool(row)"><i class="bi bi-bank"></i></button>
                                 <button type="button" class="btn btn-sm btn-primary" title="Change Status" @click="openStatus(row)"><i class="bi bi-clipboard"></i></button>
                             </td>
                         </tr>
@@ -58,7 +59,7 @@
                     </tfoot>
                 </table>
             </div>
-            <div v-else>
+            <div v-else-if="page === 2">
                 <h1>{{textSurvey}} Survey</h1>
                 <button type="button" class="btn btn-lg btn-primary mb-4" @click="back">BACK</button>
                 <form>
@@ -123,6 +124,48 @@
                     </div>
                     <button type="button" class="btn btn-lg btn-success mt-4" @click="addQuestion">Add Question</button>
                     <div class="mt-5 fw-bolder fst-italic">Note: Can only delete questions before submitting them. Once submitted, you can only update them.</div>
+                </div>
+            </div>
+            <div v-else>
+                <h1>Survey #{{survey.id}}</h1>
+                <button type="button" class="btn btn-lg btn-primary mb-4" @click="back">BACK</button>
+                <h2 class="mt-4">Questions</h2>
+                <div v-for="row, index in questions" :key="index">
+                    <h5 v-text="row.title"></h5>
+                    <table class="table table-bordered table-stripped">
+                        <thead>
+                            <tr v-if="+row.type === 0">
+                                <th>Choice</th>
+                                <th>Count</th>
+                            </tr>
+                            <tr v-else-if="+row.type === 1">
+                                <th>Rating</th>
+                                <th>Count</th>
+                            </tr>
+                            <tr v-else>
+                                <th>Answer</th>
+                            </tr>
+                        </thead>
+                        <tbody v-if="+row.type === 0">
+                            <tr v-for="choice,indx in row.choices" :key="indx">
+                                <td v-text="choice"></td>
+                                <td v-if="answers[index] && answers[index][indx] !== undefined" v-text="answers[index][indx]"></td>
+                                <td v-else>0</td>
+                            </tr>
+                        </tbody>
+                        <tbody v-else-if="+row.type === 1">
+                            <tr v-for="rating,indx in ratings" :key="indx">
+                                <td v-text="rating"></td>
+                                <td v-if="answers[index] && answers[index][rating] !== undefined" v-text="answers[index][rating]"></td>
+                                <td v-else>0</td>
+                            </tr>
+                        </tbody>
+                        <tbody v-else>
+                            <tr v-for="answer,indx in answers[index]" :key="indx">
+                                <td v-text="answer"></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -212,6 +255,8 @@ export default {
             lp: {},
             showStatus: false,
             status: {},
+            answers: [],
+            ratings: ["0", "0.5", "1", "1.5", "2", "2.5", "3", "3.5", "4", "4.5", "5"]
         }
     },
     computed: {
@@ -239,6 +284,51 @@ export default {
     },
     methods: {
         ...mapMutations(['setUserType']),
+        async seeReport(row) {
+            this.survey = {
+                id: row.id,
+                name: row.name,
+            }
+            // console.log(row.addr)
+            const loader = this.$loading.show({loader: "bars"})
+            const survey = new web3.eth.Contract(Survey.abi, row.addr)
+            const data = await survey.methods.getQuestions().call({from: this.walletAddress})
+            // console.log(data)
+            if (data.length > 0) {
+                for(const index in data) {
+                    const row = data[index]
+                    this.questions.push({
+                        id: index,
+                        title: row.title,
+                        type: row.questionType,
+                        choices: row.choices,
+                    })
+
+                    //grab answers
+                    try {
+                        const array = await survey.methods.getAnswers(index).call({from: this.walletAddress})
+                        if (+row.questionType < 2) {
+                            const dat = {}
+                            for(const a of array) {
+                                const n = +a
+                                if (typeof dat[n] === 'undefined') {
+                                    dat[n] = 0
+                                }
+                                dat[n]++
+                            }
+                            this.answers[index] = dat
+                        } else {
+                            this.answers[index] = array
+                        }
+                    } catch (e) {
+                        console.log(e)
+                    }
+                }
+                // console.log(answers)
+            }
+            loader.hide()
+            this.page = 3
+        },
         fromWei(x) {
             return web3.utils.fromWei(""+x, "ether")
         },
@@ -397,7 +487,7 @@ export default {
                     this.survey.id,
                     row.id,
                     +row.type,
-                    web3.utils.toWei(row.worth, 'ether'),
+                    web3.utils.toWei(""+row.worth, 'ether'),
                     row.required,
                     row.title,
                     row.description,
@@ -416,7 +506,7 @@ export default {
                 const args = [
                     this.survey.id,
                     +row.type,
-                    web3.utils.toWei(row.worth, 'ether'),
+                    web3.utils.toWei(""+row.worth, 'ether'),
                     row.required,
                     row.title,
                     row.description,
@@ -445,6 +535,7 @@ export default {
         back() {
             this.page = 1
             this.questions = []
+            this.answers = []
         },
         removeChoice(row, indx) {
             row.choices.splice(indx, 1)
@@ -487,7 +578,7 @@ export default {
             // const loader = this.$loading.show({loader: 'bars'})
             try {
                 this.data = await this.survanaContract.methods.getCreatorSurveys().call({from: this.walletAddress})
-                console.log(this.data)
+                // console.log(this.data)
             } catch (e) {
                 console.log(e)
             }
@@ -515,10 +606,12 @@ export default {
             const loader = this.$loading.show({loader: "bars"})
             const survey = new web3.eth.Contract(Survey.abi, row.addr)
             const data = await survey.methods.getQuestions().call({from: this.walletAddress})
+            // console.log(data)
             if (data.length > 0) {
-                for(const row of data) {
+                for(const index in data) {
+                    const row = data[index]
                     this.questions.push({
-                        id: row.id,
+                        id: index,
                         worth: web3.utils.fromWei(""+row.worth, 'ether').toString(),
                         required: row.required,
                         title: row.title,

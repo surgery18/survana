@@ -3,4 +3,4 @@ Survey dApp demo.
 
 Try the demo here
 
-https://survana.herokuapp.com/
+https://64064f053ccfe236133ed017--animated-licorice-387a34.netlify.app/

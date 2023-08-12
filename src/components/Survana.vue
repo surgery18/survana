@@ -50,7 +50,7 @@ export default {
         const nid = await web3.eth.net.getId()
         console.log("Network ID is", nid)
 
-        this.setTokenContract(new web3.eth.Contract(Token.abi, "0x328F2d2D54D2A406c9536993195bA8B8eBABD2Cf"))
+        this.setTokenContract(new web3.eth.Contract(Token.abi, "0x56f3cB9C0869f5939A3D6918793539c11A87C424"))
 
         const std = Survana.networks[nid]
         if (std) {

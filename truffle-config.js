@@ -56,7 +56,13 @@ module.exports = {
         return new HDWalletProvider(mnemonic, "https://rinkeby.infura.io/v3/1d8f58563ff0471d9394344e1ef02808")
       },
       network_id: 4,
-    }
+    },
+    bsctestnet: {
+      provider() {
+        return new HDWalletProvider(mnemonic, 'https://data-seed-prebsc-1-s1.binance.org:8545/');
+      },
+      network_id: 97,
+    },
     // advanced: {
     // port: 8777,             // Custom port
     // network_id: 1342,       // Custom network

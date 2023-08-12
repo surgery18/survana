@@ -75,7 +75,7 @@
                         <label class="form-label">Bonus Amount</label>
                         <input type="number" min="0" class="form-control" v-model="survey.bonusAmount" />
                     </div>
-                    <button type="submit" class="btn btn-primary" @click="submitSurvey">{{textSurvey}} Survey</button>
+                    <button type="submit" class="btn btn-primary" @click.prevent="submitSurvey">{{textSurvey}} Survey</button>
                 </form>
                 <h2 class="mt-4">Questions</h2>
                 <span v-if="survey.id == null">Must submit survey first before adding questions</span>
@@ -454,6 +454,7 @@ export default {
         },
         async getBalances() {
             let token = await this.tokenContract.methods.balanceOf(this.walletAddress).call({from: this.walletAddress})
+            // console.log(token)
             token = web3.utils.fromWei(""+token, "ether")
             let eth = await web3.eth.getBalance(this.walletAddress)
             eth = web3.utils.fromWei(""+eth, "ether")
